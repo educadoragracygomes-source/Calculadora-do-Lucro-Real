@@ -3,288 +3,450 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Calculadora do Lucro Real</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+<title>Calculadora do Lucro Real — Gracy Gomes</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --orange:#FF6B35;--orange2:#e85a22;--orange3:#FFB347;--orange-light:#fff7f2;
-  --orange-border:#ffe0cc;--orange-muted:#ffd4b8;--orange-text:#c44a0a;
-  --brown:#3d1a00;--brown2:#8b4513;--brown3:#c08060;--brown4:#5c2a00;
-  --lucro:#2d7a3a;--lucro-bg:#e8f5e9;--prejuizo:#c0392b;--prejuizo-bg:#fdecea;
-  --warn:#e07b00;--warn-bg:#fff8e1;
-  --surface:#fff;--page-bg:#fff7f2;
-  --border-r:14px;
+  --green:#1F7A63;--green2:#175e4c;--green3:#e8f5f1;--green4:#c8e8df;
+  --nude:#F3E8E2;--nude2:#ede0d8;--nude3:#f9f3f0;
+  --lilac:#C8B6E2;--lilac2:#b09fd0;--lilac3:#f0ebf9;
+  --text:#2B2B2B;--text2:#5a5a5a;--text3:#9a9a9a;
+  --lucro:#1F7A63;--lucro-bg:#e8f5f1;--lucro-border:#a8d8cc;
+  --prejuizo:#c0392b;--prejuizo-bg:#fdecea;--prejuizo-border:#f5b7b1;
+  --warn:#b07800;--warn-bg:#fffbef;--warn-border:#f0d080;
+  --surface:#fff;--page-bg:#F3E8E2;
+  --r:16px;--r-sm:10px;
+  --shadow:0 2px 16px rgba(31,122,99,.08);
+  --shadow-md:0 4px 24px rgba(31,122,99,.12);
 }
-body{font-family:'DM Sans',sans-serif;background:var(--page-bg);color:var(--brown);min-height:100vh}
+body{font-family:'Inter',sans-serif;background:var(--page-bg);color:var(--text);min-height:100vh;font-size:16px;line-height:1.6}
 
-/* ── SPLASH / PASSWORD ── */
-#splash{position:fixed;inset:0;background:linear-gradient(135deg,var(--orange) 0%,#FF8C42 50%,var(--orange3) 100%);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
-.splash-logo{font-size:2.5rem;margin-bottom:1rem}
-.splash-title{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:#fff;text-align:center;margin-bottom:.5rem}
-.splash-sub{color:rgba(255,255,255,.85);font-size:14px;text-align:center;margin-bottom:2rem;line-height:1.6}
-.splash-card{background:#fff;border-radius:20px;padding:2rem;width:100%;max-width:380px;box-shadow:0 8px 40px rgba(0,0,0,.15)}
-.splash-card label{display:block;font-size:13px;font-weight:500;color:var(--brown2);margin-bottom:8px}
-.splash-card input{width:100%;border:1.5px solid var(--orange-border);border-radius:10px;padding:12px 14px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s}
-.splash-card input:focus{border-color:var(--orange)}
-.splash-error{color:var(--prejuizo);font-size:12px;margin-top:6px;display:none}
-.btn-orange{width:100%;background:linear-gradient(135deg,var(--orange),var(--orange2));color:#fff;border:none;border-radius:12px;padding:13px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-top:1rem;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 16px rgba(255,107,53,.35)}
-.btn-orange:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,107,53,.4)}
-.btn-orange:active{transform:translateY(0)}
-.splash-lock{font-size:12px;color:var(--brown3);text-align:center;margin-top:1rem}
+/* ── SPLASH ── */
+#splash{position:fixed;inset:0;background:linear-gradient(145deg,#1F7A63 0%,#175e4c 50%,#0f4236 100%);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;transition:opacity .5s}
+.splash-deco{position:absolute;top:-80px;right:-80px;width:280px;height:280px;border-radius:50%;background:rgba(200,182,226,.12)}
+.splash-deco2{position:absolute;bottom:-60px;left:-60px;width:200px;height:200px;border-radius:50%;background:rgba(243,232,226,.08)}
+.splash-logo{font-size:3rem;margin-bottom:.75rem;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.splash-title{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#fff;text-align:center;margin-bottom:.5rem;position:relative}
+.splash-sub{color:rgba(255,255,255,.82);font-size:1rem;text-align:center;margin-bottom:2rem;line-height:1.6;max-width:360px;position:relative}
+.splash-card{background:#fff;border-radius:20px;padding:2rem;width:100%;max-width:400px;box-shadow:0 20px 60px rgba(0,0,0,.2);position:relative}
+.splash-notice{background:var(--nude3);border-radius:10px;padding:.85rem 1rem;margin-bottom:1.25rem;border:1px solid var(--nude2);font-size:.9rem;color:#6b4c3b;line-height:1.5;text-align:center}
+.splash-card label{display:block;font-size:.9rem;font-weight:500;color:var(--text2);margin-bottom:6px}
+.splash-card input{width:100%;border:1.5px solid var(--nude2);border-radius:10px;padding:12px 14px;font-size:1rem;font-family:'Inter',sans-serif;outline:none;transition:border-color .2s;color:var(--text)}
+.splash-card input:focus{border-color:var(--green)}
+.splash-error{color:var(--prejuizo);font-size:.85rem;margin-top:6px;display:none}
+.btn-green{width:100%;background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;border:none;border-radius:12px;padding:14px;font-family:'Inter',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;margin-top:1rem;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 16px rgba(31,122,99,.3);letter-spacing:.3px}
+.btn-green:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(31,122,99,.4)}
+.btn-green:active{transform:translateY(0)}
+.splash-hint{font-size:.8rem;color:var(--text3);text-align:center;margin-top:.75rem}
 
-/* ── WELCOME SCREEN ── */
+/* ── CELEBRAÇÃO ── */
+#celebracao{position:fixed;inset:0;z-index:998;display:none;align-items:center;justify-content:center;background:rgba(31,122,99,.85);backdrop-filter:blur(4px)}
+.celeb-card{background:#fff;border-radius:24px;padding:2.5rem;text-align:center;max-width:380px;width:90%;animation:popIn .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+.celeb-emoji{font-size:4rem;margin-bottom:.75rem;display:block}
+.celeb-title{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;margin-bottom:.5rem}
+.celeb-title.lucro{color:var(--green)}
+.celeb-title.prejuizo{color:var(--prejuizo)}
+.celeb-msg{font-size:1rem;color:var(--text2);line-height:1.6;margin-bottom:1.25rem}
+.celeb-valor{font-size:2rem;font-weight:700;margin-bottom:1rem}
+.celeb-valor.lucro{color:var(--green)}
+.celeb-valor.prejuizo{color:var(--prejuizo)}
+.btn-celeb{background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;border:none;border-radius:12px;padding:12px 28px;font-size:.95rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+
+/* ── CONFETES ── */
+.confete{position:fixed;width:10px;height:10px;border-radius:2px;animation:cair 3s ease-in forwards;z-index:999;pointer-events:none}
+@keyframes cair{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+
+/* ── WELCOME ── */
 #welcome{display:none;min-height:100vh}
-.welcome-hero{background:linear-gradient(135deg,var(--orange) 0%,#FF8C42 50%,var(--orange3) 100%);padding:3rem 1.5rem;text-align:center;position:relative;overflow:hidden}
-.welcome-hero::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.08)}
-.welcome-hero::after{content:'';position:absolute;bottom:-40px;left:-40px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.06)}
-.welcome-emoji{font-size:2.5rem;margin-bottom:.75rem}
-.welcome-hero h2{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:#fff;margin-bottom:.75rem}
-.welcome-hero p{color:rgba(255,255,255,.88);font-size:14px;line-height:1.6;max-width:440px;margin:0 auto}
-.welcome-btns{padding:2rem 1.5rem;max-width:500px;margin:0 auto}
-.welcome-btn{display:flex;align-items:center;gap:1rem;background:var(--surface);border:1.5px solid var(--orange-border);border-radius:16px;padding:1.25rem 1.5rem;margin-bottom:1rem;cursor:pointer;transition:border-color .2s,box-shadow .2s;width:100%}
-.welcome-btn:hover{border-color:var(--orange);box-shadow:0 4px 16px rgba(255,107,53,.1)}
-.welcome-btn-icon{width:44px;height:44px;border-radius:50%;background:var(--orange-light);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
-.welcome-btn-text{text-align:left}
-.welcome-btn-text strong{display:block;font-size:14px;font-weight:600;color:var(--brown);margin-bottom:2px}
-.welcome-btn-text span{font-size:12px;color:var(--brown3)}
+.welcome-hero{background:linear-gradient(145deg,var(--green) 0%,var(--green2) 100%);padding:3.5rem 2rem;text-align:center;position:relative;overflow:hidden}
+.welcome-hero::before{content:'';position:absolute;top:-80px;right:-80px;width:250px;height:250px;border-radius:50%;background:rgba(200,182,226,.15)}
+.welcome-hero::after{content:'';position:absolute;bottom:-50px;left:-50px;width:180px;height:180px;border-radius:50%;background:rgba(243,232,226,.1)}
+.welcome-emoji{font-size:3rem;margin-bottom:1rem;display:block;animation:float 3s ease-in-out infinite}
+.welcome-hero h2{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#fff;margin-bottom:.75rem}
+.welcome-hero p{color:rgba(255,255,255,.88);font-size:1rem;line-height:1.6;max-width:480px;margin:0 auto}
+.welcome-btns{padding:2rem 1.5rem;max-width:540px;margin:0 auto}
+.welcome-btn{display:flex;align-items:center;gap:1.25rem;background:var(--surface);border:1.5px solid var(--nude2);border-radius:18px;padding:1.5rem;margin-bottom:1rem;cursor:pointer;transition:border-color .2s,box-shadow .2s,transform .15s;width:100%;text-align:left}
+.welcome-btn:hover{border-color:var(--green);box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.welcome-btn-icon{width:52px;height:52px;border-radius:50%;background:var(--green3);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
+.welcome-btn-text strong{display:block;font-size:1rem;font-weight:600;color:var(--text);margin-bottom:3px}
+.welcome-btn-text span{font-size:.9rem;color:var(--text2)}
 
-/* ── EXAMPLES SCREEN ── */
+/* ── EXEMPLOS ── */
 #examples-screen{display:none;min-height:100vh}
-.examples-hero{background:linear-gradient(135deg,var(--orange) 0%,#FF8C42 50%,var(--orange3) 100%);padding:2rem 1.5rem;position:relative;overflow:hidden}
-.examples-hero::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.08)}
-.back-btn{background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:20px;padding:6px 14px;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:1rem;display:inline-flex;align-items:center;gap:6px}
-.examples-hero h2{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:#fff;margin-bottom:.4rem}
-.examples-hero p{color:rgba(255,255,255,.85);font-size:13px}
-.examples-grid{padding:1.5rem;max-width:560px;margin:0 auto;display:grid;gap:1rem}
-.example-card{background:var(--surface);border:1.5px solid var(--orange-border);border-radius:16px;padding:1.25rem;cursor:pointer;transition:border-color .2s,box-shadow .2s}
-.example-card:hover{border-color:var(--orange);box-shadow:0 4px 16px rgba(255,107,53,.1)}
-.example-card-header{display:flex;align-items:center;gap:12px;margin-bottom:.75rem}
-.example-icon{width:40px;height:40px;border-radius:50%;background:var(--orange-light);display:flex;align-items:center;justify-content:center;font-size:1.1rem}
-.example-name{font-size:14px;font-weight:600;color:var(--brown)}
-.example-desc{font-size:12px;color:var(--brown3)}
+.examples-hero{background:linear-gradient(145deg,var(--green) 0%,var(--green2) 100%);padding:2rem 1.5rem;position:relative;overflow:hidden}
+.examples-hero::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:rgba(200,182,226,.15)}
+.back-btn{background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:20px;padding:7px 16px;font-size:.85rem;font-family:'Inter',sans-serif;cursor:pointer;margin-bottom:1rem;display:inline-flex;align-items:center;gap:6px;transition:background .2s}
+.back-btn:hover{background:rgba(255,255,255,.3)}
+.examples-hero h2{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:#fff;margin-bottom:.4rem}
+.examples-hero p{color:rgba(255,255,255,.85);font-size:.95rem}
+.examples-grid{padding:1.5rem;max-width:600px;margin:0 auto;display:grid;gap:1rem}
+.example-card{background:var(--surface);border:1.5px solid var(--nude2);border-radius:18px;padding:1.5rem;cursor:pointer;transition:border-color .2s,box-shadow .2s,transform .15s}
+.example-card:hover{border-color:var(--green);box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.example-card-header{display:flex;align-items:center;gap:14px;margin-bottom:1rem}
+.example-icon{width:48px;height:48px;border-radius:50%;background:var(--green3);display:flex;align-items:center;justify-content:center;font-size:1.3rem}
+.example-name{font-size:1rem;font-weight:600;color:var(--text)}
+.example-desc{font-size:.85rem;color:var(--text2);margin-top:2px}
 .example-tags{display:flex;gap:8px;flex-wrap:wrap}
-.example-tag{background:var(--orange-light);color:var(--orange-text);font-size:11px;padding:3px 10px;border-radius:8px;font-weight:500}
+.example-tag{background:var(--green3);color:var(--green);font-size:.8rem;padding:4px 12px;border-radius:8px;font-weight:500}
 
-/* ── MAIN APP ── */
-#app{display:none;min-height:100vh;padding-bottom:2rem}
-.app-hero{background:linear-gradient(135deg,var(--orange) 0%,#FF8C42 50%,var(--orange3) 100%);padding:1.75rem 1.5rem;position:relative;overflow:hidden}
-.app-hero::before{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.08)}
-.app-hero-badge{display:inline-block;background:rgba(255,255,255,.2);color:#fff;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-bottom:.6rem}
-.app-hero h1{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:#fff;line-height:1.2;margin-bottom:.3rem}
-.app-hero p{color:rgba(255,255,255,.85);font-size:13px}
-.restart-btn{position:absolute;top:1.25rem;right:1.25rem;background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:20px;padding:5px 12px;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;gap:5px}
+/* ── APP ── */
+#app{display:none;min-height:100vh;padding-bottom:3rem}
+.app-hero{background:linear-gradient(145deg,var(--green) 0%,var(--green2) 100%);padding:2rem 1.5rem;position:relative;overflow:hidden}
+.app-hero::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(200,182,226,.12)}
+.app-hero-badge{display:inline-block;background:rgba(255,255,255,.2);color:#fff;font-size:.78rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:.75rem}
+.app-hero h1{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:#fff;line-height:1.2;margin-bottom:.3rem}
+.app-hero p{color:rgba(255,255,255,.85);font-size:.95rem}
+.restart-btn{position:absolute;top:1.25rem;right:1.25rem;background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:20px;padding:6px 14px;font-size:.82rem;font-family:'Inter',sans-serif;cursor:pointer;display:flex;align-items:center;gap:5px;transition:background .2s}
+.restart-btn:hover{background:rgba(255,255,255,.3)}
+
+/* NOME INPUT NO HERO */
+.nome-wrap{margin-top:1rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.nome-wrap label{color:rgba(255,255,255,.85);font-size:.88rem;font-weight:500}
+.nome-input{background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.3);border-radius:10px;padding:7px 12px;font-size:.9rem;font-family:'Inter',sans-serif;color:#fff;outline:none;width:200px;transition:border-color .2s}
+.nome-input::placeholder{color:rgba(255,255,255,.5)}
+.nome-input:focus{border-color:rgba(255,255,255,.7)}
 
 /* TABS */
-.tabs-wrap{background:var(--surface);border-bottom:1px solid var(--orange-border);position:sticky;top:0;z-index:10;overflow-x:auto}
+.tabs-wrap{background:var(--surface);border-bottom:1.5px solid var(--nude2);position:sticky;top:0;z-index:10;overflow-x:auto;box-shadow:0 2px 8px rgba(31,122,99,.06)}
 .tabs{display:flex;min-width:max-content}
-.tab{padding:14px 16px;font-size:12px;font-weight:500;color:var(--brown3);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:color .2s,border-color .2s;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:5px}
-.tab.active{color:var(--orange);border-bottom-color:var(--orange);font-weight:600}
-.tab:hover:not(.active){color:var(--brown2)}
-
-.tab-content{display:none;padding:1.25rem;max-width:700px;margin:0 auto}
+.tab{padding:16px 18px;font-size:.88rem;font-weight:500;color:var(--text3);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:color .2s,border-color .2s;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:6px}
+.tab.active{color:var(--green);border-bottom-color:var(--green);font-weight:600}
+.tab:hover:not(.active){color:var(--text2)}
+.tab-content{display:none;padding:1.5rem;max-width:740px;margin:0 auto}
 .tab-content.active{display:block}
 
-/* SECTION TITLES */
-.sec-title{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:600;color:var(--orange-text);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
-.sec-title::after{content:'';flex:1;height:1px;background:var(--orange-muted)}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--orange);display:inline-block;flex-shrink:0}
+/* TÍTULOS DE SEÇÃO */
+.sec-title{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:600;color:var(--green);margin-bottom:1.25rem;display:flex;align-items:center;gap:8px}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--green4)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;flex-shrink:0}
 
 /* CARDS */
-.card{background:var(--surface);border-radius:var(--border-r);padding:1.25rem;border:1px solid var(--orange-border);margin-bottom:1rem;box-shadow:0 2px 10px rgba(255,107,53,.05)}
-.card-title{font-size:13px;font-weight:600;color:var(--brown2);margin-bottom:1rem;display:flex;align-items:center;gap:6px}
+.card{background:var(--surface);border-radius:var(--r);padding:1.5rem;border:1px solid var(--nude2);margin-bottom:1.25rem;box-shadow:var(--shadow)}
+.card-title{font-size:1rem;font-weight:600;color:var(--text2);margin-bottom:1.25rem;display:flex;align-items:center;gap:8px}
 
 /* INPUTS */
-.input-group{margin-bottom:1rem}
+.input-group{margin-bottom:1.25rem}
 .input-group:last-child{margin-bottom:0}
-.input-label{display:block;font-size:13px;font-weight:500;color:var(--brown2);margin-bottom:4px}
-.input-hint{font-size:11px;color:var(--brown3);display:block;margin-bottom:5px}
-.input-row{display:flex;align-items:center;background:var(--orange-light);border:1.5px solid var(--orange-border);border-radius:10px;overflow:hidden;transition:border-color .2s}
-.input-row:focus-within{border-color:var(--orange)}
-.input-prefix{padding:0 11px;font-size:14px;font-weight:600;color:var(--orange);background:#fff0e8;align-self:stretch;display:flex;align-items:center;border-right:1px solid var(--orange-border)}
-.input-row input{border:none;background:transparent;padding:10px 11px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--brown);width:100%;outline:none}
+.input-label{display:block;font-size:.95rem;font-weight:500;color:var(--text);margin-bottom:4px}
+.input-hint{font-size:.82rem;color:var(--text3);display:block;margin-bottom:6px}
+.input-row{display:flex;align-items:center;background:var(--nude3);border:1.5px solid var(--nude2);border-radius:12px;overflow:hidden;transition:border-color .2s,box-shadow .2s}
+.input-row:focus-within{border-color:var(--green);box-shadow:0 0 0 3px rgba(31,122,99,.1)}
+.input-prefix{padding:0 14px;font-size:1rem;font-weight:600;color:var(--green);background:var(--green3);align-self:stretch;display:flex;align-items:center;border-right:1px solid var(--green4)}
+.input-row input{border:none;background:transparent;padding:12px 14px;font-size:1rem;font-family:'Inter',sans-serif;color:var(--text);width:100%;outline:none}
+
+/* META */
+.meta-wrap{background:var(--lilac3);border:1px solid var(--lilac);border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.25rem}
+.meta-label{font-size:.88rem;font-weight:600;color:#6b5a8a;margin-bottom:.5rem}
+.meta-row{display:flex;align-items:center;gap:10px}
+.meta-input{background:#fff;border:1.5px solid var(--lilac);border-radius:10px;padding:9px 12px;font-size:.95rem;font-family:'Inter',sans-serif;color:var(--text);outline:none;flex:1;transition:border-color .2s}
+.meta-input:focus{border-color:var(--lilac2)}
+.meta-progress-wrap{margin-top:.75rem}
+.meta-progress-label{font-size:.82rem;color:#6b5a8a;margin-bottom:4px}
+.meta-progress-bg{height:10px;background:#e8e0f5;border-radius:10px;overflow:hidden}
+.meta-progress-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--lilac2),var(--lilac));transition:width 1s ease}
+.meta-progress-fill.atingida{background:linear-gradient(90deg,var(--green),#4caf50)}
+.meta-msg{font-size:.85rem;margin-top:.5rem;font-weight:500}
 
 /* DEMONSTRATIVO */
 .demo-table{width:100%;border-collapse:collapse}
-.demo-table tr{border-bottom:1px solid #fff0e8}
+.demo-table tr{border-bottom:1px solid var(--nude2)}
 .demo-table tr:last-child{border-bottom:none}
-.demo-table td{padding:9px 0;font-size:13.5px}
+.demo-table td{padding:10px 0;font-size:.95rem}
 .demo-table td:last-child{text-align:right;font-weight:500}
-.demo-total{background:var(--orange-light);border-radius:10px;padding:10px 12px;margin-top:8px;display:flex;justify-content:space-between;align-items:center}
-.demo-total-label{font-size:13px;font-weight:600;color:var(--brown2)}
-.demo-total-value{font-size:1.3rem;font-weight:700}
-.demo-total-value.lucro{color:var(--lucro)}
+.demo-total{background:var(--nude3);border-radius:12px;padding:12px 16px;margin-top:10px;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--nude2)}
+.demo-total-label{font-size:.95rem;font-weight:600;color:var(--text2)}
+.demo-total-value{font-size:1.5rem;font-weight:700}
+.demo-total-value.lucro{color:var(--green)}
 .demo-total-value.prejuizo{color:var(--prejuizo)}
-.demo-final{border-radius:12px;padding:12px 14px;margin-top:8px;display:flex;justify-content:space-between;align-items:center}
-.demo-final.lucro{background:var(--lucro-bg)}
-.demo-final.prejuizo{background:var(--prejuizo-bg)}
-.demo-final.neutral{background:var(--orange-light)}
-.demo-final-label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
-.demo-final-label.lucro{color:var(--lucro)}
+.demo-total-value.neutral{color:var(--green)}
+.demo-final{border-radius:14px;padding:14px 16px;margin-top:10px;display:flex;justify-content:space-between;align-items:center}
+.demo-final.lucro{background:var(--lucro-bg);border:1.5px solid var(--lucro-border)}
+.demo-final.prejuizo{background:var(--prejuizo-bg);border:1.5px solid var(--prejuizo-border)}
+.demo-final.neutral{background:var(--nude3);border:1px solid var(--nude2)}
+.demo-final-label{font-size:.82rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px}
+.demo-final-label.lucro{color:var(--green)}
 .demo-final-label.prejuizo{color:var(--prejuizo)}
-.demo-final-label.neutral{color:var(--brown2)}
-.demo-final-value{font-size:1.5rem;font-weight:700}
-.demo-final-value.lucro{color:var(--lucro)}
+.demo-final-label.neutral{color:var(--text2)}
+.demo-final-value{font-size:1.8rem;font-weight:700}
+.demo-final-value.lucro{color:var(--green)}
 .demo-final-value.prejuizo{color:var(--prejuizo)}
-.demo-final-value.neutral{color:var(--orange)}
+.demo-final-value.neutral{color:var(--text2)}
 
 /* METRICS */
-.metrics-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:1rem}
-.metric-card{background:var(--orange-light);border-radius:12px;padding:1rem;border:1px solid var(--orange-border)}
-.metric-label{font-size:11px;color:var(--brown3);margin-bottom:4px;font-weight:500}
-.metric-value{font-size:1.3rem;font-weight:600;color:var(--brown)}
-.metric-value.lucro{color:var(--lucro)}
+.metrics-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:1.25rem}
+.metric-card{background:var(--nude3);border-radius:14px;padding:1.1rem;border:1px solid var(--nude2)}
+.metric-label{font-size:.82rem;color:var(--text3);margin-bottom:5px;font-weight:500}
+.metric-value{font-size:1.4rem;font-weight:600;color:var(--text)}
+.metric-value.lucro{color:var(--green)}
 .metric-value.prejuizo{color:var(--prejuizo)}
+.margem-bg{height:8px;background:var(--nude2);border-radius:10px;overflow:hidden;margin-top:6px}
+.margem-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--green),#4caf50);transition:width 1s ease}
+.margem-fill.red{background:linear-gradient(90deg,var(--prejuizo),#e74c3c)}
 
-/* MARGEM BAR */
-.margem-wrap{margin-top:6px}
-.margem-pct{font-size:11px;color:var(--brown3);margin-bottom:3px}
-.margem-bg{height:8px;background:#ffe8d4;border-radius:10px;overflow:hidden}
-.margem-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--orange),var(--orange3));transition:width .8s ease}
-.margem-fill.green{background:linear-gradient(90deg,#2d7a3a,#4caf50)}
-.margem-fill.red{background:linear-gradient(90deg,#c0392b,#e74c3c)}
+/* BADGE */
+.badge{display:inline-block;font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:8px;text-transform:uppercase;letter-spacing:.4px}
+.badge.lucro{background:var(--lucro-bg);color:var(--green)}
+.badge.prejuizo{background:var(--prejuizo-bg);color:var(--prejuizo)}
+.badge.neutral{background:var(--nude3);color:var(--text2)}
+.badge.warn{background:var(--warn-bg);color:var(--warn)}
 
 /* TERMÔMETRO */
-.termo-card{background:var(--surface);border-radius:var(--border-r);padding:1.25rem;border:1px solid var(--orange-border);margin-bottom:1rem}
-.termo-header{display:flex;align-items:center;gap:12px;margin-bottom:1rem}
-.termo-icon{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
+.termo-card{background:var(--surface);border-radius:var(--r);padding:1.5rem;border:1px solid var(--nude2);margin-bottom:1.25rem;box-shadow:var(--shadow)}
+.termo-header{display:flex;align-items:center;gap:14px;margin-bottom:1.25rem}
+.termo-icon{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.7rem;flex-shrink:0}
 .termo-icon.lucro{background:var(--lucro-bg)}
 .termo-icon.atencao{background:var(--warn-bg)}
 .termo-icon.prejuizo{background:var(--prejuizo-bg)}
-.termo-icon.neutral{background:var(--orange-light)}
-.termo-titulo{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:600}
-.termo-titulo.lucro{color:var(--lucro)}
+.termo-icon.neutral{background:var(--green3)}
+.termo-titulo{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:600}
+.termo-titulo.lucro{color:var(--green)}
 .termo-titulo.atencao{color:var(--warn)}
 .termo-titulo.prejuizo{color:var(--prejuizo)}
-.termo-titulo.neutral{color:var(--brown3)}
-.termo-sub{font-size:11px;color:var(--brown3);margin-top:2px}
+.termo-titulo.neutral{color:var(--text3)}
+.termo-sub{font-size:.85rem;color:var(--text3);margin-top:3px}
+.gauge-track{height:14px;border-radius:10px;background:linear-gradient(90deg,#fdecea 0%,#fffbef 45%,var(--lucro-bg) 100%);position:relative;margin-bottom:7px}
+.gauge-marker{position:absolute;top:50%;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.2);transition:left 1s ease}
+.gauge-labels{display:flex;justify-content:space-between;font-size:.8rem;color:var(--text3);font-weight:500}
+.diag-box{border-radius:14px;padding:1.25rem;border-left:4px solid var(--green);background:var(--green3);font-size:.95rem;color:var(--text);line-height:1.7;margin-top:1.25rem}
+.diag-box.lucro{border-left-color:var(--green);background:var(--lucro-bg)}
+.diag-box.atencao{border-left-color:var(--warn);background:var(--warn-bg)}
+.diag-box.prejuizo{border-left-color:var(--prejuizo);background:var(--prejuizo-bg)}
+.diag-strong{font-weight:600;color:var(--text)}
+.dica-lista{margin-top:.75rem;list-style:none;padding:0}
+.dica-lista li{padding:5px 0 5px 20px;position:relative;font-size:.92rem}
+.dica-lista li::before{content:'→';position:absolute;left:0;color:var(--green);font-weight:600}
 
-.gauge-track{height:12px;border-radius:10px;background:linear-gradient(90deg,#fdecea 0%,#fff8e1 45%,#e8f5e9 100%);position:relative;margin-bottom:6px}
-.gauge-marker{position:absolute;top:50%;transform:translate(-50%,-50%);width:22px;height:22px;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.2);transition:left .9s ease}
-.gauge-labels{display:flex;justify-content:space-between;font-size:10px;color:#bbb;font-weight:500}
+/* CARTA PERSONALIZADA */
+.carta-box{background:linear-gradient(135deg,var(--green3),var(--lilac3));border-radius:16px;padding:1.5rem;border:1px solid var(--green4);margin-top:1.25rem}
+.carta-titulo{font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;color:var(--green);margin-bottom:.75rem;display:flex;align-items:center;gap:6px}
+.carta-texto{font-size:.95rem;color:var(--text);line-height:1.8;font-style:italic}
 
-.diag-box{border-radius:12px;padding:1.25rem;border-left:4px solid var(--orange);background:var(--orange-light);font-size:13px;color:var(--brown4);line-height:1.7;margin-top:1rem}
-.diag-box.lucro{border-left-color:var(--lucro);background:#f2fbf4}
-.diag-box.atencao{border-left-color:var(--warn);background:#fffbf0}
-.diag-box.prejuizo{border-left-color:var(--prejuizo);background:#fff5f5}
-.diag-strong{font-weight:600;color:var(--brown)}
-.dica-lista{margin-top:10px;list-style:none;padding:0}
-.dica-lista li{padding:4px 0 4px 18px;position:relative;font-size:13px}
-.dica-lista li::before{content:'→';position:absolute;left:0;color:var(--orange);font-weight:600}
+/* CARTÃO INSTAGRAM */
+.btn-share{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--lilac2),var(--lilac));color:#fff;border:none;border-radius:12px;padding:12px 20px;font-family:'Inter',sans-serif;font-size:.92rem;font-weight:600;cursor:pointer;margin-top:1rem;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 14px rgba(176,159,208,.4)}
+.btn-share:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(176,159,208,.5)}
+#cartao-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:990;align-items:center;justify-content:center;padding:1rem}
+#cartao-modal.open{display:flex}
+.cartao-wrap{background:#fff;border-radius:20px;padding:1.5rem;max-width:440px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.cartao-titulo{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;color:var(--green);margin-bottom:1rem;text-align:center}
+#cartao-visual{background:linear-gradient(145deg,var(--green) 0%,var(--green2) 100%);border-radius:16px;padding:1.75rem;text-align:center;margin-bottom:1rem}
+.cv-logo{font-size:2rem;margin-bottom:.5rem}
+.cv-title{font-family:'Playfair Display',serif;font-size:1.1rem;color:#fff;margin-bottom:1rem;font-weight:600}
+.cv-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem}
+.cv-item{background:rgba(255,255,255,.15);border-radius:10px;padding:.75rem}
+.cv-label{font-size:.72rem;color:rgba(255,255,255,.75);margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px}
+.cv-value{font-size:1.1rem;font-weight:700;color:#fff}
+.cv-resultado{background:rgba(255,255,255,.2);border-radius:12px;padding:1rem;margin-bottom:1rem}
+.cv-res-label{font-size:.8rem;color:rgba(255,255,255,.8);margin-bottom:3px}
+.cv-res-value{font-size:1.8rem;font-weight:700;color:#fff}
+.cv-footer{font-size:.75rem;color:rgba(255,255,255,.7);font-style:italic}
+.cartao-btns{display:flex;gap:.75rem}
+.btn-fechar{flex:1;background:var(--nude2);color:var(--text2);border:none;border-radius:10px;padding:11px;font-family:'Inter',sans-serif;font-size:.9rem;cursor:pointer}
+.btn-baixar{flex:2;background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;border:none;border-radius:10px;padding:11px;font-family:'Inter',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer}
 
 /* ALERTAS */
-.alert-item{display:flex;align-items:flex-start;gap:10px;background:var(--orange-light);border:1px solid var(--orange-border);border-radius:10px;padding:.75rem 1rem;margin-bottom:.6rem;font-size:13px;color:var(--brown4)}
-.alert-item.warn{background:var(--warn-bg);border-color:#ffd08a}
-.alert-item.ok{background:var(--lucro-bg);border-color:#a5d6a7}
-.alert-item.danger{background:var(--prejuizo-bg);border-color:#f5b7b1}
-.alert-icon{font-size:1rem;flex-shrink:0;margin-top:1px}
+.alert-item{display:flex;align-items:flex-start;gap:10px;border-radius:12px;padding:.9rem 1rem;margin-bottom:.75rem;font-size:.92rem;color:var(--text)}
+.alert-item.default{background:var(--green3);border:1px solid var(--green4)}
+.alert-item.warn{background:var(--warn-bg);border:1px solid var(--warn-border)}
+.alert-item.ok{background:var(--lucro-bg);border:1px solid var(--lucro-border)}
+.alert-item.danger{background:var(--prejuizo-bg);border:1px solid var(--prejuizo-border)}
+.alert-icon{font-size:1.1rem;flex-shrink:0;margin-top:1px}
 
 /* ANUAL */
-.month-row{display:grid;grid-template-columns:80px 1fr 1fr 1fr 1fr 1fr;gap:6px;align-items:center;margin-bottom:.5rem}
-.month-label{font-size:12px;font-weight:500;color:var(--brown2)}
-.month-input{border:1px solid var(--orange-border);border-radius:8px;padding:6px 8px;font-size:12px;font-family:'DM Sans',sans-serif;background:var(--orange-light);color:var(--brown);width:100%;outline:none}
-.month-input:focus{border-color:var(--orange)}
-.month-result{font-size:12px;font-weight:600;text-align:right}
-.month-result.lucro{color:var(--lucro)}
+.annual-metrics{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.25rem}
+.annual-card{background:var(--surface);border:1px solid var(--nude2);border-radius:14px;padding:1.1rem;box-shadow:var(--shadow)}
+.annual-label{font-size:.82rem;color:var(--text3);margin-bottom:5px}
+.annual-value{font-size:1.4rem;font-weight:600}
+.annual-value.lucro{color:var(--green)}
+.annual-value.prejuizo{color:var(--prejuizo)}
+.month-row{display:grid;grid-template-columns:80px 1fr 1fr 1fr 1fr 1fr 1fr;gap:6px;align-items:center;margin-bottom:.6rem}
+.month-label{font-size:.9rem;font-weight:500;color:var(--text2)}
+.month-input{border:1px solid var(--nude2);border-radius:8px;padding:7px 8px;font-size:.88rem;font-family:'Inter',sans-serif;background:var(--nude3);color:var(--text);width:100%;outline:none;transition:border-color .2s}
+.month-input:focus{border-color:var(--green)}
+.month-result{font-size:.9rem;font-weight:600;text-align:right}
+.month-result.lucro{color:var(--green)}
 .month-result.prejuizo{color:var(--prejuizo)}
-.month-result.zero{color:var(--brown3)}
-.col-header{font-size:10px;color:var(--brown3);font-weight:500;text-align:right}
+.month-result.zero{color:var(--text3)}
+.col-header{font-size:.78rem;color:var(--text3);font-weight:500;text-align:right}
 .col-header:first-child{text-align:left}
+.comparativo-box{background:var(--green3);border:1px solid var(--green4);border-radius:12px;padding:1rem;margin-top:.75rem;font-size:.9rem;color:var(--green);font-weight:500}
 
 /* SAÚDE */
-.saude-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:1rem}
-.saude-card{border-radius:12px;padding:1rem;border:1px solid var(--orange-border)}
-.saude-label{font-size:11px;font-weight:500;color:var(--brown3);margin-bottom:4px}
-.saude-valor{font-size:1.1rem;font-weight:600}
-.saude-status{font-size:10px;margin-top:2px}
+.saude-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:1.25rem}
+.saude-card{border-radius:14px;padding:1.1rem;border:1px solid var(--nude2);background:var(--surface);position:relative}
+.saude-label{font-size:.82rem;font-weight:500;color:var(--text3);margin-bottom:5px}
+.saude-valor{font-size:1.2rem;font-weight:600}
+.saude-status{font-size:.8rem;margin-top:3px}
 
-/* PROLABORE ANALYSIS */
-.prol-card{background:var(--lucro-bg);border:1px solid #a5d6a7;border-radius:12px;padding:1rem;margin-top:1rem}
-.prol-card.warn{background:var(--warn-bg);border-color:#ffd08a}
-.prol-card.danger{background:var(--prejuizo-bg);border-color:#f5b7b1}
-.prol-title{font-size:12px;font-weight:600;color:var(--brown2);margin-bottom:.5rem}
-.prol-value{font-size:1.4rem;font-weight:700;color:var(--lucro)}
+/* PROLABORE */
+.prol-card{border-radius:14px;padding:1.1rem;margin-top:1rem;border:1px solid var(--lucro-border);background:var(--lucro-bg)}
+.prol-card.warn{background:var(--warn-bg);border-color:var(--warn-border)}
+.prol-card.danger{background:var(--prejuizo-bg);border-color:var(--prejuizo-border)}
+.prol-title{font-size:.88rem;font-weight:600;color:var(--text2);margin-bottom:.5rem}
+.prol-value{font-size:1.5rem;font-weight:700;color:var(--green)}
 .prol-value.warn{color:var(--warn)}
 .prol-value.danger{color:var(--prejuizo)}
-.prol-hint{font-size:11px;color:var(--brown3);margin-top:4px}
+.prol-hint{font-size:.82rem;color:var(--text3);margin-top:4px}
 
-/* CHART WRAP */
-.chart-wrap{position:relative;width:100%;height:220px;margin-top:.75rem}
-.chart-wrap.tall{height:280px}
+/* CHARTS */
+.chart-wrap{position:relative;width:100%;height:240px;margin-top:1rem}
+.chart-wrap.tall{height:300px}
 
-/* BADGES */
-.badge{display:inline-block;font-size:10px;font-weight:600;padding:3px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:.4px}
-.badge.lucro{background:var(--lucro-bg);color:var(--lucro)}
-.badge.prejuizo{background:var(--prejuizo-bg);color:var(--prejuizo)}
-.badge.neutral{background:var(--orange-light);color:var(--orange-text)}
-.badge.warn{background:var(--warn-bg);color:var(--warn)}
+/* ANUAL DESTAQUES */
+.anual-best{background:var(--lucro-bg);border-radius:10px;padding:.6rem 1rem;font-size:.92rem;color:var(--green);font-weight:500;display:flex;align-items:center;gap:8px;margin-bottom:.5rem;border:1px solid var(--lucro-border)}
+.anual-worst{background:var(--prejuizo-bg);border-radius:10px;padding:.6rem 1rem;font-size:.92rem;color:var(--prejuizo);font-weight:500;display:flex;align-items:center;gap:8px;margin-bottom:.5rem;border:1px solid var(--prejuizo-border)}
 
-/* ANNUAL SUMMARY */
-.annual-metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem}
-.annual-card{background:var(--surface);border:1px solid var(--orange-border);border-radius:12px;padding:1rem}
-.annual-label{font-size:11px;color:var(--brown3);margin-bottom:4px}
-.annual-value{font-size:1.25rem;font-weight:600}
-.annual-value.lucro{color:var(--lucro)}
-.annual-value.prejuizo{color:var(--prejuizo)}
-.annual-value.orange{color:var(--orange)}
+.divider{height:1px;background:var(--nude2);margin:1.25rem 0}
 
-.divider{height:1px;background:var(--orange-border);margin:1rem 0}
+/* CARDS DE RESULTADO */
+.resultado-overlay{display:none;position:fixed;inset:0;z-index:995;align-items:center;justify-content:center;padding:1.5rem;background:rgba(30,30,30,.75);backdrop-filter:blur(6px)}
+.resultado-overlay.open{display:flex}
+.resultado-card{border-radius:24px;padding:2.5rem 2rem;max-width:420px;width:100%;text-align:center;animation:popIn .45s cubic-bezier(.34,1.56,.64,1);position:relative;box-shadow:0 24px 60px rgba(0,0,0,.25)}
+.resultado-card.lucro{background:linear-gradient(145deg,#e8f5f1,#f2fbf8);border:2px solid var(--lucro-border)}
+.resultado-card.atencao{background:linear-gradient(145deg,#fffbef,#fff8e1);border:2px solid var(--warn-border)}
+.resultado-card.prejuizo{background:linear-gradient(145deg,#fff5f5,#fdecea);border:2px solid var(--prejuizo-border)}
+.rc-fechar{position:absolute;top:1rem;right:1.25rem;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--text3);line-height:1}
+.rc-emoji{font-size:3.5rem;margin-bottom:.75rem;display:block}
+.rc-titulo{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;margin-bottom:.5rem;line-height:1.2}
+.rc-titulo.lucro{color:var(--green)}
+.rc-titulo.atencao{color:var(--warn)}
+.rc-titulo.prejuizo{color:var(--prejuizo)}
+.rc-valor{font-size:2.2rem;font-weight:700;margin:.75rem 0;padding:.6rem 1.5rem;border-radius:14px;display:inline-block}
+.rc-valor.lucro{background:var(--lucro-bg);color:var(--green)}
+.rc-valor.atencao{background:var(--warn-bg);color:var(--warn)}
+.rc-valor.prejuizo{background:var(--prejuizo-bg);color:var(--prejuizo)}
+.rc-margem{font-size:.9rem;font-weight:500;margin-bottom:1rem}
+.rc-margem.lucro{color:var(--green)}
+.rc-margem.atencao{color:var(--warn)}
+.rc-margem.prejuizo{color:var(--prejuizo)}
+.rc-msg{font-size:.98rem;color:var(--text2);line-height:1.7;margin-bottom:1.5rem}
+.rc-dicas{text-align:left;background:rgba(255,255,255,.7);border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.5rem}
+.rc-dicas-titulo{font-size:.82rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.6rem}
+.rc-dicas-titulo.lucro{color:var(--green)}
+.rc-dicas-titulo.atencao{color:var(--warn)}
+.rc-dicas-titulo.prejuizo{color:var(--prejuizo)}
+.rc-dicas ul{list-style:none;padding:0;margin:0}
+.rc-dicas ul li{font-size:.88rem;color:var(--text2);padding:4px 0 4px 18px;position:relative;line-height:1.5}
+.rc-dicas ul li::before{content:'→';position:absolute;left:0;font-weight:700}
+.rc-dicas ul li::before.lucro{color:var(--green)}
+.btn-rc{width:100%;padding:13px;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:.98rem;font-weight:600;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.btn-rc.lucro{background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;box-shadow:0 4px 16px rgba(31,122,99,.3)}
+.btn-rc.atencao{background:linear-gradient(135deg,#c49a00,var(--warn));color:#fff;box-shadow:0 4px 16px rgba(176,120,0,.3)}
+.btn-rc.prejuizo{background:linear-gradient(135deg,#a93226,var(--prejuizo));color:#fff;box-shadow:0 4px 16px rgba(192,57,43,.3)}
+.btn-rc:hover{transform:translateY(-2px)}
+
+/* TOOLTIP */
+.tooltip-wrap{position:relative;display:inline-flex;align-items:center;gap:5px;cursor:pointer}
+.tooltip-icon{width:16px;height:16px;border-radius:50%;background:var(--lilac);color:#fff;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;user-select:none}
+.tooltip-box{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--text);color:#fff;font-size:.82rem;line-height:1.5;padding:.6rem .85rem;border-radius:10px;width:220px;z-index:50;box-shadow:0 4px 16px rgba(0,0,0,.2);pointer-events:none}
+.tooltip-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--text)}
+.tooltip-wrap.open .tooltip-box{display:block}
+.saude-label{display:flex;align-items:center;gap:5px;font-size:.82rem;font-weight:500;color:var(--text3);margin-bottom:5px;cursor:pointer}
+
+/* BOTÃO CALCULAR */
+.btn-calcular{width:100%;background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;border:none;border-radius:14px;padding:16px;font-family:'Inter',sans-serif;font-size:1.05rem;font-weight:700;cursor:pointer;margin-top:1.5rem;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 20px rgba(31,122,99,.35);letter-spacing:.3px;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-calcular:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(31,122,99,.45)}
+.btn-calcular:active{transform:translateY(0)}
 
 /* FOOTER */
-footer{margin-top:2rem;padding:1.5rem;text-align:center;border-top:1px solid var(--orange-border)}
-.footer-text{font-size:13px;color:var(--brown3);font-style:italic}
-.footer-text strong{color:var(--orange);font-style:normal;font-weight:600}
-.footer-heart{color:var(--orange);font-size:14px}
-
-/* ANUAL highlight */
-.anual-best{background:var(--lucro-bg);border-radius:8px;padding:.4rem .75rem;font-size:12px;color:var(--lucro);font-weight:500;display:flex;align-items:center;gap:6px;margin-bottom:.4rem}
-.anual-worst{background:var(--prejuizo-bg);border-radius:8px;padding:.4rem .75rem;font-size:12px;color:var(--prejuizo);font-weight:500;display:flex;align-items:center;gap:6px;margin-bottom:.4rem}
+footer{margin-top:2rem;padding:2rem;text-align:center;border-top:1px solid var(--nude2)}
+.footer-text{font-size:.95rem;color:var(--text3);font-style:italic}
+.footer-text strong{color:var(--green);font-style:normal;font-weight:600}
+.footer-heart{color:#e85a80;font-size:1rem}
 </style>
 </head>
 <body>
 
-<!-- ══════════ SPLASH ══════════ -->
+<!-- ══ SPLASH ══ -->
 <div id="splash">
-  <div style="font-size:2.5rem;margin-bottom:.75rem">💛</div>
+  <div class="splash-deco"></div><div class="splash-deco2"></div>
+  <div class="splash-logo">💛</div>
   <div class="splash-title">Calculadora do Lucro Real</div>
   <div class="splash-sub">Feita para mulheres empreendedoras que querem entender o financeiro do seu negócio de verdade</div>
   <div class="splash-card">
-    <div style="background:#fff7f2;border-radius:10px;padding:.75rem 1rem;margin-bottom:1.1rem;border:1px solid #ffe0cc;font-size:13px;color:#8b4513;line-height:1.6;text-align:center">🔒 Esta plataforma é protegida por senha. Digite a senha abaixo para acessar.</div>
+    <div class="splash-notice">🔒 Esta plataforma é protegida por senha.<br>Digite a senha abaixo para acessar.</div>
     <label>Senha de acesso</label>
     <input type="password" id="pwInput" placeholder="Digite sua senha" onkeydown="if(event.key==='Enter')checkPw()"/>
     <div class="splash-error" id="pwError">Senha incorreta. Tente novamente.</div>
-    <button class="btn-orange" onclick="checkPw()">Entrar na Calculadora →</button>
-    <div class="splash-lock" style="margin-top:.75rem;font-size:11px;color:#c08060">🔒 Acesso exclusivo · Seus dados ficam apenas no seu dispositivo</div>
+    <button class="btn-green" onclick="checkPw()">Entrar na Calculadora →</button>
+    <div class="splash-hint">🔒 Acesso exclusivo · Seus dados ficam apenas no seu dispositivo</div>
   </div>
 </div>
 
-<!-- ══════════ WELCOME ══════════ -->
+<!-- ══ CELEBRAÇÃO ══ -->
+<div id="celebracao">
+  <div class="celeb-card">
+    <span class="celeb-emoji" id="celeb-emoji">🎉</span>
+    <div class="celeb-title" id="celeb-title">Parabéns!</div>
+    <div class="celeb-msg" id="celeb-msg">Seu negócio está indo muito bem!</div>
+    <div class="celeb-valor" id="celeb-valor"></div>
+    <button class="btn-celeb" onclick="fecharCelebracao()">Ver meu resultado →</button>
+  </div>
+</div>
+
+<!-- ══ CARTÃO MODAL ══ -->
+<div id="cartao-modal">
+  <div class="cartao-wrap">
+    <div class="cartao-titulo">📸 Seu cartão para compartilhar</div>
+    <div id="cartao-visual">
+      <div class="cv-logo">💛</div>
+      <div class="cv-title">Calculadora do Lucro Real</div>
+      <div class="cv-grid">
+        <div class="cv-item"><div class="cv-label">Faturamento</div><div class="cv-value" id="cv-fat">—</div></div>
+        <div class="cv-item"><div class="cv-label">Margem</div><div class="cv-value" id="cv-marg">—</div></div>
+        <div class="cv-item"><div class="cv-label">Custos</div><div class="cv-value" id="cv-custo">—</div></div>
+        <div class="cv-item"><div class="cv-label">Pró-labore</div><div class="cv-value" id="cv-prol">—</div></div>
+      </div>
+      <div class="cv-resultado">
+        <div class="cv-res-label" id="cv-res-label">Resultado Final</div>
+        <div class="cv-res-value" id="cv-res-value">—</div>
+      </div>
+      <div class="cv-footer">Feito por Gracy Gomes ♥ para mulheres que constroem negócios incríveis</div>
+    </div>
+    <div class="cartao-btns">
+      <button class="btn-fechar" onclick="fecharCartao()">Fechar</button>
+      <button class="btn-baixar" onclick="alert('Tire um print desta tela para salvar seu cartão! 📸')">📸 Salvar print</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CARDS DE RESULTADO ══ -->
+<div class="resultado-overlay" id="resultado-overlay">
+  <div class="resultado-card" id="resultado-card">
+    <button class="rc-fechar" onclick="fecharResultado()">✕</button>
+    <span class="rc-emoji" id="rc-emoji">🎉</span>
+    <div class="rc-titulo" id="rc-titulo">Título</div>
+    <div class="rc-valor" id="rc-valor">R$ 0</div>
+    <div class="rc-margem" id="rc-margem"></div>
+    <div class="rc-msg" id="rc-msg"></div>
+    <div class="rc-dicas" id="rc-dicas"></div>
+    <button class="btn-rc" id="btn-rc" onclick="fecharEIrParaRaioX()">🔍 Ver análise completa no Raio X →</button>
+  </div>
+</div>
+
+<!-- ══ WELCOME ══ -->
 <div id="welcome">
   <div class="welcome-hero">
-    <div class="welcome-emoji">👋</div>
+    <span class="welcome-emoji">👋</span>
     <h2>Bem-vinda!</h2>
     <p>Como você prefere começar? Insira os dados do seu negócio do zero ou veja exemplos reais de empreendedoras do setor de beleza.</p>
   </div>
   <div class="welcome-btns">
     <button class="welcome-btn" onclick="startBlank()">
       <div class="welcome-btn-icon">✏️</div>
-      <div class="welcome-btn-text">
-        <strong>Começar do zero</strong>
-        <span>Preencho com os dados do meu próprio negócio</span>
-      </div>
+      <div class="welcome-btn-text"><strong>Começar do zero</strong><span>Preencho com os dados do meu próprio negócio</span></div>
     </button>
     <button class="welcome-btn" onclick="showExamples()">
       <div class="welcome-btn-icon">💄</div>
-      <div class="welcome-btn-text">
-        <strong>Ver exemplos do setor de beleza</strong>
-        <span>Veja como outras empreendedoras do segmento preencheram</span>
-      </div>
+      <div class="welcome-btn-text"><strong>Ver exemplos do setor de beleza</strong><span>Veja como outras empreendedoras do segmento preencheram</span></div>
     </button>
   </div>
 </div>
 
-<!-- ══════════ EXAMPLES ══════════ -->
+<!-- ══ EXEMPLOS ══ -->
 <div id="examples-screen">
   <div class="examples-hero">
     <button class="back-btn" onclick="backToWelcome()">← Voltar</button>
@@ -293,54 +455,31 @@ footer{margin-top:2rem;padding:1.5rem;text-align:center;border-top:1px solid var
   </div>
   <div class="examples-grid">
     <div class="example-card" onclick="loadExample('ana')">
-      <div class="example-card-header">
-        <div class="example-icon">💅</div>
-        <div>
-          <div class="example-name">Studio de Unhas da Ana</div>
-          <div class="example-desc">Nail designer autônoma — São Paulo/SP</div>
-        </div>
-      </div>
-      <div class="example-tags">
-        <span class="example-tag">Fat. R$ 8.500/mês</span>
-        <span class="example-tag">Margem 20%</span>
-      </div>
+      <div class="example-card-header"><div class="example-icon">💅</div><div><div class="example-name">Studio de Unhas da Ana</div><div class="example-desc">Nail designer autônoma — São Paulo/SP</div></div></div>
+      <div class="example-tags"><span class="example-tag">Fat. R$ 8.500/mês</span><span class="example-tag">Margem 20%</span></div>
     </div>
     <div class="example-card" onclick="loadExample('maria')">
-      <div class="example-card-header">
-        <div class="example-icon">✂️</div>
-        <div>
-          <div class="example-name">Salão da Maria</div>
-          <div class="example-desc">Cabeleireira e colorista — Belo Horizonte/MG</div>
-        </div>
-      </div>
-      <div class="example-tags">
-        <span class="example-tag">Fat. R$ 4.200/mês</span>
-        <span class="example-tag">Margem 11%</span>
-      </div>
+      <div class="example-card-header"><div class="example-icon">✂️</div><div><div class="example-name">Salão da Maria</div><div class="example-desc">Cabeleireira e colorista — Belo Horizonte/MG</div></div></div>
+      <div class="example-tags"><span class="example-tag">Fat. R$ 4.200/mês</span><span class="example-tag">Margem 11%</span></div>
     </div>
     <div class="example-card" onclick="loadExample('carol')">
-      <div class="example-card-header">
-        <div class="example-icon">🌸</div>
-        <div>
-          <div class="example-name">Estética da Carol</div>
-          <div class="example-desc">Esteticista e designer de sobrancelha — Curitiba/PR</div>
-        </div>
-      </div>
-      <div class="example-tags">
-        <span class="example-tag">Fat. R$ 6.800/mês</span>
-        <span class="example-tag">Margem 27%</span>
-      </div>
+      <div class="example-card-header"><div class="example-icon">🌸</div><div><div class="example-name">Estética da Carol</div><div class="example-desc">Esteticista e designer de sobrancelha — Curitiba/PR</div></div></div>
+      <div class="example-tags"><span class="example-tag">Fat. R$ 6.800/mês</span><span class="example-tag">Margem 27%</span></div>
     </div>
   </div>
 </div>
 
-<!-- ══════════ APP ══════════ -->
+<!-- ══ APP ══ -->
 <div id="app">
   <div class="app-hero">
     <div class="app-hero-badge">✦ Para Mulheres Empreendedoras</div>
     <h1>💛 Calculadora do Lucro Real</h1>
-    <p>Entenda exatamente quanto sua empresa está lucrando</p>
+    <p>Entenda exatamente quanto seu negócio está lucrando</p>
     <button class="restart-btn" onclick="restart()">🔄 Reiniciar</button>
+    <div class="nome-wrap">
+      <label>Seu nome:</label>
+      <input class="nome-input" id="nomeUsuaria" placeholder="Ex: Ana, Maria..." oninput="atualizarNome()"/>
+    </div>
   </div>
 
   <div class="tabs-wrap">
@@ -352,237 +491,153 @@ footer{margin-top:2rem;padding:1.5rem;text-align:center;border-top:1px solid var
     </div>
   </div>
 
-  <!-- ── TAB 1: CALCULADORA MENSAL ── -->
+  <!-- TAB 1: MENSAL -->
   <div class="tab-content active" id="tab-mensal">
     <div class="sec-title"><span class="dot"></span>💰 Calculadora do Mês</div>
-    <p style="font-size:13px;color:var(--brown3);margin-bottom:1rem">Preencha os campos com os valores do seu mês. O resultado aparece automaticamente em tempo real.</p>
+    <p style="font-size:.95rem;color:var(--text2);margin-bottom:1.25rem">Preencha os campos com os valores do seu mês. O resultado aparece automaticamente em tempo real.</p>
+
+    <!-- META -->
+    <div class="meta-wrap">
+      <div class="meta-label">🎯 Meta de lucro do mês (opcional)</div>
+      <div class="meta-row">
+        <span style="font-size:.95rem;font-weight:600;color:var(--green)">R$</span>
+        <input class="meta-input" type="number" id="meta" placeholder="Ex: 2000" min="0" oninput="calcMensal()"/>
+      </div>
+      <div id="meta-progress-area" style="display:none">
+        <div class="meta-progress-wrap">
+          <div class="meta-progress-label" id="meta-progress-label">0% da meta atingida</div>
+          <div class="meta-progress-bg"><div class="meta-progress-fill" id="meta-progress-fill" style="width:0%"></div></div>
+        </div>
+        <div class="meta-msg" id="meta-msg"></div>
+      </div>
+    </div>
 
     <div class="card">
       <div class="card-title">🔢 Insira os Valores</div>
-      <div class="input-group">
-        <label class="input-label">Faturamento Mensal</label>
-        <span class="input-hint">tudo que entrou no mês</span>
-        <div class="input-row"><span class="input-prefix">R$</span><input type="number" id="fat" placeholder="0,00" min="0" step="0.01" oninput="calcMensal()"/></div>
-      </div>
-      <div class="input-group">
-        <label class="input-label">Custos Ligados à Venda</label>
-        <span class="input-hint">matéria-prima, comissões, embalagens...</span>
-        <div class="input-row"><span class="input-prefix">R$</span><input type="number" id="cmv" placeholder="0,00" min="0" step="0.01" oninput="calcMensal()"/></div>
-      </div>
-      <div class="input-group">
-        <label class="input-label">Despesas Fixas</label>
-        <span class="input-hint">aluguel, energia, internet, salários...</span>
-        <div class="input-row"><span class="input-prefix">R$</span><input type="number" id="fixas" placeholder="0,00" min="0" step="0.01" oninput="calcMensal()"/></div>
-      </div>
-      <div class="input-group">
-        <label class="input-label">Impostos e Taxas</label>
-        <span class="input-hint">DAS, ISS, taxas bancárias...</span>
-        <div class="input-row"><span class="input-prefix">R$</span><input type="number" id="imp" placeholder="0,00" min="0" step="0.01" oninput="calcMensal()"/></div>
-      </div>
-      <div class="input-group">
-        <label class="input-label">Pró-labore / Retiradas</label>
-        <span class="input-hint">quanto você retirou para si</span>
-        <div class="input-row"><span class="input-prefix">R$</span><input type="number" id="prol" placeholder="0,00" min="0" step="0.01" oninput="calcMensal()"/></div>
-        <span class="input-hint" style="margin-top:4px">💡 Sugestão ideal: até 50% do lucro antes das retiradas</span>
-      </div>
+      <div class="input-group"><label class="input-label">Faturamento Mensal</label><span class="input-hint">tudo que entrou no mês</span><div class="input-row"><span class="input-prefix">R$</span><input type="number" id="fat" placeholder="0,00" min="0" step="0.01" oninput="calcMensal()"/></div></div>
+      <div class="input-group"><label class="input-label">Custos Ligados à Venda</label><span class="input-hint">matéria-prima, comissões, embalagens...</span><div class="input-row"><span class="input-prefix">R$</span><input type="number" id="cmv" placeholder="0,00" min="0" step="0.01" oninput="calcMensal()"/></div></div>
+      <div class="input-group"><label class="input-label">Despesas Fixas</label><span class="input-hint">aluguel, energia, internet, salários...</span><div class="input-row"><span class="input-prefix">R$</span><input type="number" id="fixas" placeholder="0,00" min="0" step="0.01" oninput="calcMensal()"/></div></div>
+      <div class="input-group"><label class="input-label">Impostos e Taxas</label><span class="input-hint">DAS, ISS, taxas bancárias...</span><div class="input-row"><span class="input-prefix">R$</span><input type="number" id="imp" placeholder="0,00" min="0" step="0.01" oninput="calcMensal()"/></div></div>
+      <div class="input-group"><label class="input-label">Pró-labore / Retiradas</label><span class="input-hint">quanto você retirou para si</span><div class="input-row"><span class="input-prefix">R$</span><input type="number" id="prol" placeholder="0,00" min="0" step="0.01" oninput="calcMensal()"/></div><span class="input-hint" style="margin-top:5px">💡 Sugestão ideal: até 50% do lucro antes das retiradas</span></div>
     </div>
 
-    <div class="card">
+    <div style="margin:.25rem 0 .5rem;font-size:.85rem;color:var(--text3);text-align:center">Preencha todos os campos e clique em calcular</div>
+    <button class="btn-calcular" onclick="calcularFinal()">✨ Calcular meu resultado</button>
+    <div id="aviso-campos" style="background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:10px;padding:.75rem 1rem;margin-top:.75rem;font-size:.88rem;color:var(--warn);display:none;text-align:center">⚠️ Preencha todos os campos antes de calcular.</div>
+
+    <div class="card" id="card-demonstrativo" style="display:none">
       <div class="card-title">📋 Demonstrativo de Resultado</div>
       <table class="demo-table">
-        <tr><td style="color:var(--brown3)">(+) Faturamento</td><td id="d-fat">R$ 0,00</td></tr>
-        <tr><td style="color:var(--brown3)">(–) Custos Ligados à Venda</td><td id="d-cmv">R$ 0,00</td></tr>
-        <tr><td style="color:var(--brown3)">(–) Despesas Fixas</td><td id="d-fixas">R$ 0,00</td></tr>
-        <tr><td style="color:var(--brown3)">(–) Impostos e Taxas</td><td id="d-imp">R$ 0,00</td></tr>
+        <tr><td style="color:var(--text3)">(+) Faturamento</td><td id="d-fat">R$ 0,00</td></tr>
+        <tr><td style="color:var(--text3)">(–) Custos Ligados à Venda</td><td id="d-cmv">R$ 0,00</td></tr>
+        <tr><td style="color:var(--text3)">(–) Despesas Fixas</td><td id="d-fixas">R$ 0,00</td></tr>
+        <tr><td style="color:var(--text3)">(–) Impostos e Taxas</td><td id="d-imp">R$ 0,00</td></tr>
       </table>
       <div class="demo-total">
-        <div>
-          <div class="demo-total-label" id="label-antes">= Lucro / Prejuízo Antes das Retiradas</div>
-          <span class="badge neutral" id="badge-antes">—</span>
-        </div>
+        <div><div class="demo-total-label">= Lucro / Prejuízo Antes das Retiradas</div><span class="badge neutral" id="badge-antes">—</span></div>
         <div class="demo-total-value neutral" id="d-antes">R$ 0,00</div>
       </div>
-      <table class="demo-table" style="margin-top:8px">
-        <tr><td style="color:var(--brown3)">(–) Pró-labore / Retiradas</td><td id="d-prol">R$ 0,00</td></tr>
-      </table>
+      <table class="demo-table" style="margin-top:8px"><tr><td style="color:var(--text3)">(–) Pró-labore / Retiradas</td><td id="d-prol">R$ 0,00</td></tr></table>
       <div class="demo-final neutral" id="demo-final">
-        <div>
-          <div class="demo-final-label neutral" id="demo-final-label">RESULTADO FINAL</div>
-          <span class="badge neutral" id="badge-final">—</span>
-        </div>
+        <div><div class="demo-final-label neutral" id="demo-final-label">RESULTADO FINAL</div><span class="badge neutral" id="badge-final">—</span></div>
         <div class="demo-final-value neutral" id="d-final">R$ 0,00</div>
       </div>
-
       <div class="divider"></div>
       <div class="metrics-grid">
-        <div class="metric-card">
-          <div class="metric-label">Margem Líquida</div>
-          <div class="metric-value" id="m-margem">—</div>
-          <div style="font-size:10px;color:var(--brown3);margin-top:2px">lucro ÷ faturamento</div>
-          <div class="margem-wrap"><div class="margem-bg"><div class="margem-fill" id="bar-margem" style="width:0%"></div></div></div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-label">Custo Total</div>
-          <div class="metric-value" id="m-custo">R$ 0</div>
-          <div style="font-size:10px;color:var(--brown3);margin-top:2px">tudo que saiu</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-label">Sobra da Empresa</div>
-          <div class="metric-value" id="m-sobra">R$ 0</div>
-          <div style="font-size:10px;color:var(--brown3);margin-top:2px">após retiradas</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-label">Pró-labore Ideal</div>
-          <div class="metric-value" id="m-prol-ideal">R$ 0</div>
-          <div style="font-size:10px;color:var(--brown3);margin-top:2px">50% do lucro</div>
-        </div>
+        <div class="metric-card"><div class="metric-label">Margem Líquida</div><div class="metric-value" id="m-margem">—</div><div style="font-size:.8rem;color:var(--text3);margin-top:2px">lucro ÷ faturamento</div><div class="margem-bg"><div class="margem-fill" id="bar-margem" style="width:0%"></div></div></div>
+        <div class="metric-card"><div class="metric-label">Custo Total</div><div class="metric-value" id="m-custo">R$ 0</div><div style="font-size:.8rem;color:var(--text3);margin-top:2px">tudo que saiu</div></div>
+        <div class="metric-card"><div class="metric-label">Sobra da Empresa</div><div class="metric-value" id="m-sobra">R$ 0</div><div style="font-size:.8rem;color:var(--text3);margin-top:2px">após retiradas</div></div>
+        <div class="metric-card"><div class="metric-label">Pró-labore Ideal</div><div class="metric-value" id="m-prol-ideal">R$ 0</div><div style="font-size:.8rem;color:var(--text3);margin-top:2px">50% do lucro</div></div>
       </div>
+      <button class="btn-share" id="btn-share" style="display:none" onclick="abrirCartao()">📸 Gerar cartão para compartilhar</button>
     </div>
 
-    <div class="card">
-      <div class="card-title">📊 Composição do Faturamento</div>
-      <div class="chart-wrap"><canvas id="chartComposicao" role="img" aria-label="Gráfico de composição do faturamento">Composição dos custos e lucro.</canvas></div>
-    </div>
+    <div class="card" id="card-composicao" style="display:none"><div class="card-title">📊 Composição do Faturamento</div><div class="chart-wrap"><canvas id="chartComposicao" role="img" aria-label="Composição do faturamento">Gráfico de composição.</canvas></div></div>
   </div>
 
-  <!-- ── TAB 2: RAIO X MENSAL ── -->
+  <!-- TAB 2: RAIO X -->
   <div class="tab-content" id="tab-raiox">
     <div class="sec-title"><span class="dot"></span>🔍 Raio X Financeiro do Mês</div>
-    <p style="font-size:13px;color:var(--brown3);margin-bottom:1rem">Diagnóstico automático baseado nos seus números. Saiba onde está e o que precisa melhorar.</p>
-
+    <p style="font-size:.95rem;color:var(--text2);margin-bottom:1.25rem">Diagnóstico automático baseado nos seus números.</p>
     <div class="termo-card">
       <div class="card-title">🌡️ Termômetro Financeiro</div>
-      <div class="termo-header">
-        <div class="termo-icon neutral" id="rx-icon"><span id="rx-emoji">🟡</span></div>
-        <div>
-          <div class="termo-titulo neutral" id="rx-titulo">Aguardando dados</div>
-          <div class="termo-sub" id="rx-sub">Preencha a Calculadora Mensal para ver seu diagnóstico.</div>
-        </div>
-      </div>
-      <div class="gauge-track">
-        <div class="gauge-marker" id="rx-marker" style="left:48%;background:var(--brown3)"></div>
-      </div>
+      <div class="termo-header"><div class="termo-icon neutral" id="rx-icon"><span id="rx-emoji">🟡</span></div><div><div class="termo-titulo neutral" id="rx-titulo">Aguardando dados</div><div class="termo-sub" id="rx-sub">Preencha a Calculadora Mensal para ver seu diagnóstico.</div></div></div>
+      <div class="gauge-track"><div class="gauge-marker" id="rx-marker" style="left:48%;background:var(--text3)"></div></div>
       <div class="gauge-labels"><span>Prejuízo</span><span>Atenção</span><span>Lucro Saudável</span></div>
       <div class="diag-box" id="rx-diag">Preencha a Calculadora Mensal para ver o diagnóstico completo do seu mês.</div>
     </div>
-
-    <div class="card">
-      <div class="card-title">📊 Resumo do Mês</div>
-      <div class="metrics-grid">
-        <div class="metric-card"><div class="metric-label">Faturamento</div><div class="metric-value orange" id="rx-fat" style="color:var(--orange)">R$ 0</div></div>
-        <div class="metric-card"><div class="metric-label">Lucro / Prejuízo</div><div class="metric-value" id="rx-lp">R$ 0</div></div>
-        <div class="metric-card"><div class="metric-label">Margem</div><div class="metric-value" id="rx-marg">—</div></div>
-        <div class="metric-card"><div class="metric-label">Retiradas</div><div class="metric-value" style="color:var(--brown2)" id="rx-ret">R$ 0</div></div>
-      </div>
+    <div class="card"><div class="card-title">📊 Resumo do Mês</div><div class="metrics-grid"><div class="metric-card"><div class="metric-label">Faturamento</div><div class="metric-value" id="rx-fat" style="color:var(--green)">R$ 0</div></div><div class="metric-card"><div class="metric-label">Lucro / Prejuízo</div><div class="metric-value" id="rx-lp">R$ 0</div></div><div class="metric-card"><div class="metric-label">Margem</div><div class="metric-value" id="rx-marg">—</div></div><div class="metric-card"><div class="metric-label">Retiradas</div><div class="metric-value" id="rx-ret" style="color:var(--text2)">R$ 0</div></div></div></div>
+    <div class="card"><div class="card-title">⚡ Alertas Financeiros</div><div id="rx-alertas"><div class="alert-item default"><span class="alert-icon">🟡</span><span>Preencha a calculadora para ver os alertas.</span></div></div></div>
+    <div class="card"><div class="card-title">💼 Análise do Pró-labore</div><div id="rx-prol-analise"><div class="prol-card"><div class="prol-title">💡 Pró-labore Ideal</div><div class="prol-value" id="rx-prol-ideal">R$ 0,00</div><div class="prol-hint">Até 50% do lucro antes das retiradas. Assim a empresa cresce e você se remunera bem.</div></div></div></div>
+    <div class="card"><div class="card-title">📊 Distribuição por Item</div><div class="chart-wrap"><canvas id="chartCustos" role="img" aria-label="Distribuição de custos">Distribuição dos custos.</canvas></div></div>
+    <div class="card"><div class="card-title">❤️ Indicadores de Saúde Financeira</div><div class="saude-grid">
+  <div class="saude-card">
+    <div class="saude-label" onclick="toggleTooltip('tt-mb')">Margem Bruta <span class="tooltip-icon">?</span>
+      <div id="tt-mb" style="position:static;display:inline"><div class="tooltip-box" style="display:none;position:absolute;bottom:calc(100% + 8px);left:0;transform:none;width:220px;">O quanto sobra do faturamento depois de tirar só os custos diretos de venda (materiais, insumos). Ideal: acima de 40%.</div></div>
     </div>
-
-    <div class="card">
-      <div class="card-title">⚡ Alertas Financeiros</div>
-      <div id="rx-alertas"><div class="alert-item">🟡 Preencha a calculadora para ver os alertas.</div></div>
+    <div class="saude-valor" id="s-margem-bruta" style="color:var(--text3)">—</div>
+    <div class="saude-status" id="s-mb-status"></div>
+  </div>
+  <div class="saude-card">
+    <div class="saude-label" onclick="toggleTooltip('tt-pf')">Peso das Despesas Fixas <span class="tooltip-icon">?</span>
+      <div id="tt-pf" style="position:static;display:inline"><div class="tooltip-box" style="display:none;position:absolute;bottom:calc(100% + 8px);left:0;transform:none;width:220px;">Quanto suas despesas fixas (aluguel, energia, internet...) representam do seu faturamento. Ideal: até 30%.</div></div>
     </div>
-
-    <div class="card">
-      <div class="card-title">💼 Análise do Pró-labore</div>
-      <div id="rx-prol-analise">
-        <div class="prol-card">
-          <div class="prol-title">💡 Sugestão: Pró-labore Ideal</div>
-          <div class="prol-value" id="rx-prol-ideal">R$ 0,00</div>
-          <div class="prol-hint">Até 50% do lucro antes das retiradas. Assim a empresa cresce e você se remunera bem.</div>
-        </div>
-      </div>
+    <div class="saude-valor" id="s-peso-fixos" style="color:var(--text3)">—</div>
+    <div class="saude-status" id="s-pf-status"></div>
+  </div>
+  <div class="saude-card">
+    <div class="saude-label" onclick="toggleTooltip('tt-cmv')">Peso dos Insumos <span class="tooltip-icon">?</span>
+      <div id="tt-cmv" style="position:static;display:inline"><div class="tooltip-box" style="display:none;position:absolute;bottom:calc(100% + 8px);left:0;transform:none;width:220px;">Quanto você gasta em materiais, produtos e insumos para realizar seus serviços, em relação ao faturamento. Ideal: até 50%.</div></div>
     </div>
-
-    <div class="card">
-      <div class="card-title">📊 Distribuição de Custos</div>
-      <div class="chart-wrap"><canvas id="chartCustos" role="img" aria-label="Distribuição dos custos">Distribuição dos custos.</canvas></div>
+    <div class="saude-valor" id="s-peso-cmv" style="color:var(--text3)">—</div>
+    <div class="saude-status" id="s-cmv-status"></div>
+  </div>
+  <div class="saude-card">
+    <div class="saude-label" onclick="toggleTooltip('tt-pp')">Retirada vs Lucro <span class="tooltip-icon">?</span>
+      <div id="tt-pp" style="position:static;display:inline"><div class="tooltip-box" style="display:none;position:absolute;bottom:calc(100% + 8px);left:0;transform:none;width:220px;">Quanto do lucro (antes das retiradas) você está retirando para si. O ideal é retirar até 50% — assim o negócio também cresce.</div></div>
     </div>
-
-    <div class="card">
-      <div class="card-title">❤️ Indicadores de Saúde Financeira</div>
-      <div class="saude-grid" id="rx-saude">
-        <div class="saude-card" style="border-color:var(--orange-border)"><div class="saude-label">Margem Bruta</div><div class="saude-valor" id="s-margem-bruta" style="color:var(--brown3)">—</div><div class="saude-status" id="s-mb-status"></div></div>
-        <div class="saude-card" style="border-color:var(--orange-border)"><div class="saude-label">Peso dos Fixos</div><div class="saude-valor" id="s-peso-fixos" style="color:var(--brown3)">—</div><div class="saude-status" id="s-pf-status"></div></div>
-        <div class="saude-card" style="border-color:var(--orange-border)"><div class="saude-label">Peso do CMV</div><div class="saude-valor" id="s-peso-cmv" style="color:var(--brown3)">—</div><div class="saude-status" id="s-cmv-status"></div></div>
-        <div class="saude-card" style="border-color:var(--orange-border)"><div class="saude-label">Pró-labore vs Lucro</div><div class="saude-valor" id="s-prol-pct" style="color:var(--brown3)">—</div><div class="saude-status" id="s-pp-status"></div></div>
-      </div>
-    </div>
+    <div class="saude-valor" id="s-prol-pct" style="color:var(--text3)">—</div>
+    <div class="saude-status" id="s-pp-status"></div>
+  </div>
+</div></div>
+    <div class="card" id="carta-card" style="display:none"><div class="card-title">💌 Carta do Mês</div><div class="carta-box"><div class="carta-titulo">✨ Sua análise personalizada</div><div class="carta-texto" id="carta-texto">—</div></div></div>
   </div>
 
-  <!-- ── TAB 3: CALCULADORA ANUAL ── -->
+  <!-- TAB 3: ANUAL -->
   <div class="tab-content" id="tab-anual">
     <div class="sec-title"><span class="dot"></span>📅 Visão Anual — 12 Meses</div>
-    <p style="font-size:13px;color:var(--brown3);margin-bottom:1rem">Preencha mês a mês e acompanhe a evolução do seu negócio ao longo do ano.</p>
-
+    <p style="font-size:.95rem;color:var(--text2);margin-bottom:1.25rem">Preencha mês a mês e acompanhe a evolução do seu negócio.</p>
     <div class="annual-metrics">
-      <div class="annual-card"><div class="annual-label">Faturamento Anual</div><div class="annual-value orange" id="an-fat" style="color:var(--orange)">R$ 0</div></div>
+      <div class="annual-card"><div class="annual-label">Faturamento Anual</div><div class="annual-value" id="an-fat" style="color:var(--green)">R$ 0</div></div>
       <div class="annual-card"><div class="annual-label">Lucro Anual</div><div class="annual-value" id="an-lucro">R$ 0</div></div>
       <div class="annual-card"><div class="annual-label">Margem Anual</div><div class="annual-value" id="an-margem">—</div></div>
-      <div class="annual-card"><div class="annual-label">Total Retiradas</div><div class="annual-value" id="an-ret" style="color:var(--brown2)">R$ 0</div></div>
+      <div class="annual-card"><div class="annual-label">Total Retiradas</div><div class="annual-value" id="an-ret" style="color:var(--text2)">R$ 0</div></div>
     </div>
-
-    <div class="card">
-      <div class="card-title">📋 Lançamentos Mensais</div>
-      <div style="overflow-x:auto">
-        <div class="month-row" style="margin-bottom:.75rem">
-          <div class="col-header">Mês</div>
-          <div class="col-header">Faturamento</div>
-          <div class="col-header">Custos Venda</div>
-          <div class="col-header">Fixas</div>
-          <div class="col-header">Impostos</div>
-          <div class="col-header">Resultado</div>
-        </div>
-        <div id="months-rows"></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">📈 Evolução Anual</div>
-      <div class="chart-wrap tall"><canvas id="chartAnual" role="img" aria-label="Evolução anual do faturamento e lucro">Evolução anual.</canvas></div>
-    </div>
+    <div id="comparativo-box" style="display:none" class="comparativo-box" id="comp-box"></div>
+    <div class="card"><div class="card-title">📋 Lançamentos Mensais</div><div style="overflow-x:auto"><div class="month-row" style="margin-bottom:.75rem"><div class="col-header">Mês</div><div class="col-header">Faturamento</div><div class="col-header">Custos Venda</div><div class="col-header">Desp. Fixas</div><div class="col-header">Impostos</div><div class="col-header">Retiradas</div><div class="col-header">Resultado</div></div><div id="months-rows"></div></div></div>
+    <div class="card"><div class="card-title">📈 Evolução Anual</div><div class="chart-wrap tall"><canvas id="chartAnual" role="img" aria-label="Evolução anual">Evolução anual.</canvas></div></div>
   </div>
 
-  <!-- ── TAB 4: RAIO X ANUAL ── -->
+  <!-- TAB 4: RAIO X ANUAL -->
   <div class="tab-content" id="tab-raiox-anual">
     <div class="sec-title"><span class="dot"></span>📈 Raio X Financeiro Anual</div>
-    <p style="font-size:13px;color:var(--brown3);margin-bottom:1rem">Visão consolidada do ano inteiro: diagnóstico, alertas e tendências ao longo dos meses.</p>
-
+    <p style="font-size:.95rem;color:var(--text2);margin-bottom:1.25rem">Visão consolidada do ano: diagnóstico, alertas e tendências.</p>
     <div class="termo-card">
       <div class="card-title">🌡️ Diagnóstico Anual</div>
-      <div class="termo-header">
-        <div class="termo-icon neutral" id="rxa-icon"><span id="rxa-emoji">🟡</span></div>
-        <div>
-          <div class="termo-titulo neutral" id="rxa-titulo">Sem dados suficientes</div>
-          <div class="termo-sub" id="rxa-sub">Preencha a Calculadora Anual para ver o diagnóstico.</div>
-        </div>
-      </div>
-      <div class="gauge-track">
-        <div class="gauge-marker" id="rxa-marker" style="left:48%;background:var(--brown3)"></div>
-      </div>
+      <div class="termo-header"><div class="termo-icon neutral" id="rxa-icon"><span id="rxa-emoji">🟡</span></div><div><div class="termo-titulo neutral" id="rxa-titulo">Sem dados suficientes</div><div class="termo-sub" id="rxa-sub">Preencha a Calculadora Anual para ver o diagnóstico.</div></div></div>
+      <div class="gauge-track"><div class="gauge-marker" id="rxa-marker" style="left:48%;background:var(--text3)"></div></div>
       <div class="gauge-labels"><span>Prejuízo</span><span>Atenção</span><span>Lucro Saudável</span></div>
       <div class="diag-box" id="rxa-diag">Preencha a Calculadora Anual para ver o diagnóstico do ano.</div>
     </div>
-
     <div class="annual-metrics">
-      <div class="annual-card"><div class="annual-label">Faturamento do Período</div><div class="annual-value orange" id="rxa-fat" style="color:var(--orange)">R$ 0</div></div>
+      <div class="annual-card"><div class="annual-label">Faturamento do Período</div><div class="annual-value" id="rxa-fat" style="color:var(--green)">R$ 0</div></div>
       <div class="annual-card"><div class="annual-label">Lucro / Prejuízo</div><div class="annual-value" id="rxa-lp">R$ 0</div></div>
       <div class="annual-card"><div class="annual-label">Margem Média</div><div class="annual-value" id="rxa-marg">—</div></div>
-      <div class="annual-card"><div class="annual-label">Pró-labore Ideal</div><div class="annual-value" id="rxa-prol-ideal" style="color:var(--lucro)">R$ 0</div></div>
+      <div class="annual-card"><div class="annual-label">Pró-labore Ideal</div><div class="annual-value" id="rxa-prol-ideal" style="color:var(--green)">R$ 0</div></div>
     </div>
-
-    <div class="card">
-      <div class="card-title">⚡ Alertas Anuais</div>
-      <div id="rxa-alertas"><div class="alert-item">🟡 Preencha a calculadora anual para ver os alertas.</div></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">🏆 Destaques do Ano</div>
-      <div id="rxa-destaques"><p style="font-size:13px;color:var(--brown3)">Sem dados suficientes ainda.</p></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">📊 Comparativo Mensal — Faturamento vs Lucro</div>
-      <div class="chart-wrap tall"><canvas id="chartAnualRx" role="img" aria-label="Comparativo mensal faturamento vs lucro">Comparativo mensal.</canvas></div>
-    </div>
+    <div class="card"><div class="card-title">⚡ Alertas Anuais</div><div id="rxa-alertas"><div class="alert-item default"><span class="alert-icon">🟡</span><span>Preencha a calculadora anual para ver os alertas.</span></div></div></div>
+    <div class="card"><div class="card-title">🏆 Destaques do Ano</div><div id="rxa-destaques"><p style="font-size:.95rem;color:var(--text3)">Sem dados suficientes ainda.</p></div></div>
+    <div class="card"><div class="card-title">📊 Comparativo Mensal — Faturamento vs Lucro</div><div class="chart-wrap tall"><canvas id="chartAnualRx" role="img" aria-label="Comparativo anual">Comparativo mensal.</canvas></div></div>
   </div>
 
   <footer>
@@ -591,559 +646,402 @@ footer{margin-top:2rem;padding:1.5rem;text-align:center;border-top:1px solid var
 </div>
 
 <script>
-// ══════════════════════════════════
-//  HELPERS
-// ══════════════════════════════════
-const SENHA = '2610';
-const fmt = (v,sign=false) => {
-  const n = Math.abs(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
-  if(sign && v<0) return '- R$ '+n;
-  return 'R$ '+n;
-};
-const fmtShort = v => {
-  const n = Math.abs(v);
-  if(n>=1000) return (v<0?'- ':'')+' R$ '+( n/1000).toFixed(1)+'k';
-  return (v<0?'- ':'')+' R$ '+n.toFixed(0);
-};
-const pct = (a,b) => b>0 ? (a/b*100) : 0;
-const g = id => document.getElementById(id);
+const SENHA='2610';
+const fmt=v=>'R$ '+Math.abs(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtShort=v=>{const n=Math.abs(v);if(n>=1000)return (v<0?'- ':'')+'R$ '+(n/1000).toFixed(1)+'k';return (v<0?'- ':'')+'R$ '+n.toFixed(0);};
+const g=id=>document.getElementById(id);
+let nomeUsuaria='',resultadoAtual=0,fatAtual=0,cmvAtual=0,fixAtual=0,impAtual=0,prolAtual=0,antesAtual=0;
 
-function show(id){ g(id).style.display=''; }
-function hide(id){ g(id).style.display='none'; }
-
-// ══════════════════════════════════
-//  AUTH & NAVIGATION
-// ══════════════════════════════════
+// ── AUTH ──
 function checkPw(){
-  const v = g('pwInput').value.trim().toLowerCase();
-  if(v===SENHA || v===''){
-    hide('splash');
-    show('welcome');
-    g('welcome').style.display='block';
-  } else {
-    g('pwError').style.display='block';
-  }
+  if(g('pwInput').value.trim()===SENHA){
+    g('splash').style.opacity='0';
+    setTimeout(()=>{g('splash').style.display='none';g('welcome').style.display='block';},500);
+  } else { g('pwError').style.display='block'; }
 }
-g('pwInput').addEventListener('keydown', e=>{ if(e.key==='Enter') checkPw(); });
+g('pwInput').addEventListener('keydown',e=>{if(e.key==='Enter')checkPw();});
 
-function startBlank(){
-  hide('welcome');
-  show('app');
-}
-function showExamples(){
-  hide('welcome');
-  g('examples-screen').style.display='block';
-}
-function backToWelcome(){
-  g('examples-screen').style.display='none';
-  show('welcome');
-}
-function restart(){
-  hide('app');
-  // clear inputs
-  ['fat','cmv','fixas','imp','prol'].forEach(id=>{ g(id).value=''; });
-  mData = Array(12).fill(null).map(()=>({fat:0,cmv:0,fix:0,imp:0}));
-  buildMonthRows();
-  calcMensal();
-  calcAnual();
-  show('welcome');
-  switchTab('mensal', document.querySelector('.tab[data-tab="mensal"]'));
-}
+// ── NAV ──
+function startBlank(){g('welcome').style.display='none';g('app').style.display='block';}
+function showExamples(){g('welcome').style.display='none';g('examples-screen').style.display='block';}
+function backToWelcome(){g('examples-screen').style.display='none';g('welcome').style.display='block';}
+function restart(){g('app').style.display='none';const cd=g('card-demonstrativo'),cc=g('card-composicao');
+  if(cd)cd.style.display='none';if(cc)cc.style.display='none';
+  ['fat','cmv','fixas','imp','prol','meta','nomeUsuaria'].forEach(id=>{const el=g(id);if(el)el.value='';});nomeUsuaria='';mData=Array(12).fill(null).map(()=>({fat:0,cmv:0,fix:0,imp:0,prol:0}));buildMonthRows();calcMensal();calcAnual();g('welcome').style.display='block';switchTab('mensal',document.querySelector('.tab[data-tab="mensal"]'));}
 
-const EXAMPLES = {
-  ana:{fat:8500,cmv:3400,fix:1800,imp:510,prol:500},
-  maria:{fat:4200,cmv:1890,fix:900,imp:252,prol:200},
-  carol:{fat:6800,cmv:1360,fix:1800,imp:408,prol:400}
-};
-function loadExample(key){
-  const d = EXAMPLES[key];
-  g('fat').value=d.fat; g('cmv').value=d.cmv;
-  g('fixas').value=d.fix; g('imp').value=d.imp;
-  g('prol').value=d.prol;
-  g('examples-screen').style.display='none';
-  show('app');
-  calcMensal();
-  switchTab('mensal', document.querySelector('.tab[data-tab="mensal"]'));
-}
+const EXAMPLES={ana:{fat:8500,cmv:3400,fix:1800,imp:510,prol:500},maria:{fat:4200,cmv:1890,fix:900,imp:252,prol:200},carol:{fat:6800,cmv:1360,fix:1800,imp:408,prol:400}};
+function loadExample(key){const d=EXAMPLES[key];g('fat').value=d.fat;g('cmv').value=d.cmv;g('fixas').value=d.fix;g('imp').value=d.imp;g('prol').value=d.prol;g('examples-screen').style.display='none';g('app').style.display='block';calcMensal();switchTab('mensal',document.querySelector('.tab[data-tab="mensal"]'));}
 
-// ══════════════════════════════════
-//  TABS
-// ══════════════════════════════════
-function switchTab(id, el){
+function atualizarNome(){nomeUsuaria=g('nomeUsuaria').value.trim();}
+
+// ── TABS ──
+function switchTab(id,el){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
-  if(el) el.classList.add('active');
+  if(el)el.classList.add('active');
   g('tab-'+id).classList.add('active');
-  if(id==='raiox') updateRaioX();
-  if(id==='raiox-anual') updateRaioXAnual();
-  if(id==='anual') { calcAnual(); renderChartAnual(); }
+  if(id==='raiox')updateRaioX();
+  if(id==='raiox-anual')updateRaioXAnual();
+  if(id==='anual'){calcAnual();renderChartAnual();}
 }
 
-// ══════════════════════════════════
-//  MENSAL CALC
-// ══════════════════════════════════
-let chartComp=null, chartCustos=null;
+// ── CELEBRAÇÃO ──
+let celebTimer=null;
+function mostrarCelebracao(resultado,fat){
+  const cel=g('celebracao');
+  const nome=nomeUsuaria?nomeUsuaria+', ':'';
+  if(resultado>0){
+    g('celeb-emoji').textContent='🎉';
+    g('celeb-title').className='celeb-title lucro';
+    g('celeb-title').textContent='Parabéns, '+nome+'você lucrou!';
+    g('celeb-msg').textContent='Seu negócio fechou o mês no azul. Você está construindo algo incrível! ✨';
+    g('celeb-valor').className='celeb-valor lucro';
+    g('celeb-valor').textContent=fmt(resultado);
+    disparaConfetes();
+  } else {
+    g('celeb-emoji').textContent='💪';
+    g('celeb-title').className='celeb-title prejuizo';
+    g('celeb-title').textContent='Você tem coragem!';
+    g('celeb-msg').textContent='Encarar os números é o primeiro passo para virar o jogo. Você já está na frente de quem não olha.';
+    g('celeb-valor').className='celeb-valor prejuizo';
+    g('celeb-valor').textContent=fmt(resultado);
+  }
+  cel.style.display='flex';
+  if(celebTimer)clearTimeout(celebTimer);
+  celebTimer=setTimeout(fecharCelebracao,5000);
+}
+function fecharCelebracao(){g('celebracao').style.display='none';}
+
+// ── CONFETES ──
+function disparaConfetes(){
+  const cores=['#1F7A63','#C8B6E2','#F3E8E2','#FFB347','#e85a80','#4caf50'];
+  for(let i=0;i<60;i++){
+    const c=document.createElement('div');
+    c.className='confete';
+    c.style.left=Math.random()*100+'vw';
+    c.style.background=cores[Math.floor(Math.random()*cores.length)];
+    c.style.animationDelay=Math.random()*2+'s';
+    c.style.animationDuration=(2+Math.random()*2)+'s';
+    c.style.width=c.style.height=(6+Math.random()*8)+'px';
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),4000);
+  }
+}
+
+// ── CONTADOR ANIMADO ──
+function animarContador(elementId,valorFinal,prefixo='R$ ',sufixo=''){
+  const el=g(elementId);
+  if(!el)return;
+  const duracao=800,steps=40,stepTime=duracao/steps;
+  let step=0;
+  const intervalo=setInterval(()=>{
+    step++;
+    const progresso=step/steps;
+    const valorAtual=valorFinal*progresso;
+    const n=Math.abs(valorAtual).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+    el.textContent=(valorFinal<0?'- ':'')+prefixo+n+sufixo;
+    if(step>=steps){clearInterval(intervalo);el.textContent=(valorFinal<0?'- ':'')+prefixo+Math.abs(valorFinal).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+sufixo;}
+  },stepTime);
+}
+
+// ── CARTÃO ──
+function abrirCartao(){
+  g('cv-fat').textContent=fmtShort(fatAtual);
+  g('cv-marg').textContent=fatAtual>0?(resultadoAtual/fatAtual*100).toFixed(1)+'%':'—';
+  g('cv-custo').textContent=fmtShort(cmvAtual+fixAtual+impAtual);
+  g('cv-prol').textContent=fmtShort(prolAtual);
+  g('cv-res-label').textContent=resultadoAtual>=0?'Lucro do Mês 🎉':'Resultado do Mês';
+  g('cv-res-value').textContent=(resultadoAtual<0?'- ':'')+fmt(resultadoAtual);
+  g('cartao-modal').classList.add('open');
+}
+function fecharCartao(){g('cartao-modal').classList.remove('open');}
+
+// ── CALC MENSAL ──
+let chartComp=null,chartCustosInst=null,celebrou=false;
 
 function calcMensal(){
-  const fat = parseFloat(g('fat').value)||0;
-  const cmv = parseFloat(g('cmv').value)||0;
-  const fix = parseFloat(g('fixas').value)||0;
-  const imp = parseFloat(g('imp').value)||0;
-  const prol= parseFloat(g('prol').value)||0;
+  const fat=parseFloat(g('fat').value)||0,cmv=parseFloat(g('cmv').value)||0,fix=parseFloat(g('fixas').value)||0,imp=parseFloat(g('imp').value)||0,prol=parseFloat(g('prol').value)||0;
+  const meta=parseFloat(g('meta').value)||0;
+  fatAtual=fat;cmvAtual=cmv;fixAtual=fix;impAtual=imp;prolAtual=prol;
+  // Rastrear campos tocados pelo usuário
+  const camposFat=g('fat').value!=='',camposCmv=g('cmv').value!=='',camposFix=g('fixas').value!=='',camposImp=g('imp').value!=='',camposProl=g('prol').value!=='';
+  const todosCampos=camposFat&&camposCmv&&camposFix&&camposImp&&camposProl;
+  const total=cmv+fix+imp,antes=fat-total,res=antes-prol,prolIdeal=Math.max(0,antes*0.5);
+  antesAtual=antes;resultadoAtual=res;
 
-  const totalCustos = cmv+fix+imp;
-  const lucroAntes = fat - totalCustos;
-  const resultado = lucroAntes - prol;
-  const margem = fat>0 ? resultado/fat*100 : 0;
-  const prolIdeal = Math.max(0, lucroAntes*0.5);
-
-  // Demonstrativo
-  g('d-fat').textContent   = fmt(fat);
-  g('d-cmv').textContent   = fmt(cmv);
-  g('d-fixas').textContent = fmt(fix);
-  g('d-imp').textContent   = fmt(imp);
-  g('d-prol').textContent  = fmt(prol);
+  g('d-fat').textContent=fmt(fat);g('d-cmv').textContent=fmt(cmv);g('d-fixas').textContent=fmt(fix);g('d-imp').textContent=fmt(imp);g('d-prol').textContent=fmt(prol);
 
   // Antes das retiradas
-  const elAntes = g('d-antes');
-  const badgeAntes = g('badge-antes');
-  elAntes.textContent = lucroAntes<0 ? '- '+fmt(lucroAntes) : fmt(lucroAntes);
-  if(lucroAntes>0){
-    elAntes.className='demo-total-value lucro';
-    badgeAntes.className='badge lucro'; badgeAntes.textContent='Lucro';
-  } else if(lucroAntes<0){
-    elAntes.className='demo-total-value prejuizo';
-    badgeAntes.className='badge prejuizo'; badgeAntes.textContent='Prejuízo';
-  } else {
-    elAntes.className='demo-total-value neutral';
-    badgeAntes.className='badge neutral'; badgeAntes.textContent='—';
-  }
+  const ea=g('d-antes'),ba=g('badge-antes');
+  ea.textContent=antes<0?'- '+fmt(antes):fmt(antes);
+  if(antes>0){ea.className='demo-total-value lucro';ba.className='badge lucro';ba.textContent='Lucro';}
+  else if(antes<0){ea.className='demo-total-value prejuizo';ba.className='badge prejuizo';ba.textContent='Prejuízo';}
+  else{ea.className='demo-total-value neutral';ba.className='badge neutral';ba.textContent='—';}
 
-  // Resultado final
-  const elFinal = g('d-final');
-  const demoFinal = g('demo-final');
-  const flLabel = g('demo-final-label');
-  const badgeFinal = g('badge-final');
-  elFinal.textContent = resultado<0 ? '- '+fmt(resultado) : fmt(resultado);
-  if(resultado>0){
-    demoFinal.className='demo-final lucro';
-    flLabel.className='demo-final-label lucro';
-    elFinal.className='demo-final-value lucro';
-    badgeFinal.className='badge lucro'; badgeFinal.textContent='Lucro Real';
-  } else if(resultado<0){
-    demoFinal.className='demo-final prejuizo';
-    flLabel.className='demo-final-label prejuizo';
-    elFinal.className='demo-final-value prejuizo';
-    badgeFinal.className='badge prejuizo'; badgeFinal.textContent='Prejuízo';
-  } else {
-    demoFinal.className='demo-final neutral';
-    flLabel.className='demo-final-label neutral';
-    elFinal.className='demo-final-value neutral';
-    badgeFinal.className='badge neutral'; badgeFinal.textContent='—';
-  }
+  // Resultado final com animação
+  const ef=g('d-final'),df=g('demo-final'),fl=g('demo-final-label'),bf=g('badge-final');
+  if(res>0){df.className='demo-final lucro';fl.className='demo-final-label lucro';ef.className='demo-final-value lucro';bf.className='badge lucro';bf.textContent='Lucro Real';}
+  else if(res<0){df.className='demo-final prejuizo';fl.className='demo-final-label prejuizo';ef.className='demo-final-value prejuizo';bf.className='badge prejuizo';bf.textContent='Prejuízo';}
+  else{df.className='demo-final neutral';fl.className='demo-final-label neutral';ef.className='demo-final-value neutral';bf.className='badge neutral';bf.textContent='—';}
+  ef.textContent=res<0?'- '+fmt(res):fmt(res);
 
   // Métricas
-  const margemPct = fat>0 ? (resultado/fat*100).toFixed(1)+'%' : '—';
-  g('m-margem').textContent = margemPct;
-  g('m-margem').className = 'metric-value '+(resultado>0?'lucro':resultado<0?'prejuizo':'');
-  g('m-custo').textContent = fmtShort(totalCustos);
-  g('m-sobra').textContent = fmtShort(resultado);
-  g('m-sobra').className='metric-value '+(resultado>0?'lucro':resultado<0?'prejuizo':'');
-  g('m-prol-ideal').textContent = fmtShort(prolIdeal);
+  const mp=fat>0?(res/fat*100).toFixed(1)+'%':'—';
+  g('m-margem').textContent=mp;g('m-margem').className='metric-value '+(res>0?'lucro':res<0?'prejuizo':'');
+  g('m-custo').textContent=fmtShort(total);g('m-sobra').textContent=fmtShort(res);g('m-sobra').className='metric-value '+(res>0?'lucro':res<0?'prejuizo':'');g('m-prol-ideal').textContent=fmtShort(prolIdeal);
+  const bw=fat>0?Math.max(0,Math.min(100,res/fat*100)):0;
+  const bEl=g('bar-margem');bEl.style.width=bw+'%';bEl.className='margem-fill '+(res>=0?'':'red');
 
-  const barW = fat>0 ? Math.max(0,Math.min(100,resultado/fat*100)) : 0;
-  const barEl = g('bar-margem');
-  barEl.style.width = barW+'%';
-  barEl.className = 'margem-fill '+(resultado>=0?'green':'red');
+  // Meta
+  if(meta>0&&todosCampos&&fat>0){
+    const pctMeta=Math.min(100,Math.max(0,(res/meta)*100));
+    g('meta-progress-area').style.display='block';
+    g('meta-progress-fill').style.width=pctMeta+'%';
+    g('meta-progress-fill').className='meta-progress-fill'+(pctMeta>=100?' atingida':'');
+    g('meta-progress-label').textContent=pctMeta.toFixed(0)+'% da meta atingida';
+    if(pctMeta>=100){g('meta-msg').textContent='🎉 Meta atingida! Você superou o objetivo do mês!';g('meta-msg').style.color='var(--green)';}
+    else if(pctMeta>=70){g('meta-msg').textContent='💪 Quase lá! Falta '+fmt(meta-res)+' para atingir sua meta.';g('meta-msg').style.color='var(--warn)';}
+    else{g('meta-msg').textContent='🎯 Continue! Falta '+fmt(meta-res)+' para atingir sua meta.';g('meta-msg').style.color='var(--text2)';}
+  } else { g('meta-progress-area').style.display='none'; }
 
-  renderChartComposicao(fat,cmv,fix,imp,prol,resultado);
+  // Botão compartilhar
+  g('btn-share').style.display=todosCampos&&fat>0?'flex':'none';
+  // Aviso campos faltando
+  const avisoEl=g('aviso-campos');
+  if(avisoEl)avisoEl.style.display=(!todosCampos&&fat>0)?'block':'none';
+
+  // Celebração (só quando preenche fat + tem resultado)
+  if(!camposFat)celebrou=false;
+  if(fat===0)celebrou=false;
+
+  // Gráfico
+  if(chartComp){chartComp.destroy();chartComp=null;}
+  if(fat>0){chartComp=new Chart(g('chartComposicao').getContext('2d'),{type:'doughnut',data:{labels:['Custos de Venda','Despesas Fixas','Impostos','Pró-labore / Retiradas','Lucro'],datasets:[{data:[cmv,fix,imp,prol,Math.max(0,res)],backgroundColor:['#1F7A63','#C8B6E2','#b09fd0','#c08060','#4caf50'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:12},padding:12}}}}});}
 }
 
-function renderChartComposicao(fat,cmv,fix,imp,prol,resultado){
-  const ctx = g('chartComposicao').getContext('2d');
-  if(chartComp){ chartComp.destroy(); chartComp=null; }
-  if(fat<=0) return;
-  const lucro = Math.max(0,resultado);
-  chartComp = new Chart(ctx,{
-    type:'doughnut',
-    data:{
-      labels:['Custos de Venda','Despesas Fixas','Impostos','Pró-labore','Lucro'],
-      datasets:[{data:[cmv,fix,imp,prol,lucro],backgroundColor:['#FF8C42','#FFB347','#e85a22','#c08060','#2d7a3a'],borderWidth:2,borderColor:'#fff'}]
-    },
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11},padding:10}}}}
-  });
-}
-
-// ══════════════════════════════════
-//  RAIO X MENSAL
-// ══════════════════════════════════
-let chartCustosInst=null;
-
+// ── RAIO X MENSAL ──
 function updateRaioX(){
-  const fat = parseFloat(g('fat').value)||0;
-  const cmv = parseFloat(g('cmv').value)||0;
-  const fix = parseFloat(g('fixas').value)||0;
-  const imp = parseFloat(g('imp').value)||0;
-  const prol= parseFloat(g('prol').value)||0;
-  const lucroAntes = fat-cmv-fix-imp;
-  const resultado = lucroAntes-prol;
-  const margem = fat>0 ? resultado/fat*100 : 0;
-  const prolIdeal = Math.max(0,lucroAntes*0.5);
-
-  // Resumo
-  g('rx-fat').textContent = fmtShort(fat);
-  g('rx-lp').textContent  = resultado<0?'- '+fmtShort(resultado):fmtShort(resultado);
-  g('rx-lp').className    = 'metric-value '+(resultado>0?'lucro':resultado<0?'prejuizo':'');
-  g('rx-marg').textContent= fat>0 ? margem.toFixed(1)+'%' : '—';
-  g('rx-marg').className  = 'metric-value '+(resultado>0?'lucro':resultado<0?'prejuizo':'');
-  g('rx-ret').textContent = fmtShort(prol);
-
-  // Termômetro
-  applyTermometro('rx', margem, fat, resultado, lucroAntes, prol, cmv, fix, imp);
-
-  // Alertas
-  buildAlertas(fat, cmv, fix, imp, prol, lucroAntes, resultado, margem);
-
+  const fat=fatAtual,cmv=cmvAtual,fix=fixAtual,imp=impAtual,prol=prolAtual,antes=antesAtual,res=resultadoAtual;
+  const margem=fat>0?res/fat*100:0,prolIdeal=Math.max(0,antes*0.5);
+  g('rx-fat').textContent=fmtShort(fat);g('rx-lp').textContent=res<0?'- '+fmtShort(res):fmtShort(res);g('rx-lp').className='metric-value '+(res>0?'lucro':res<0?'prejuizo':'');g('rx-marg').textContent=fat>0?margem.toFixed(1)+'%':'—';g('rx-marg').className='metric-value '+(res>0?'lucro':res<0?'prejuizo':'');g('rx-ret').textContent=fmtShort(prol);
+  applyTermo('rx',margem,fat,res,antes,prol,cmv,fix,imp);
+  buildAlertas(fat,cmv,fix,imp,prol,antes,res,margem);
   // Pró-labore
-  const prolCard = g('rx-prol-analise');
-  prolCard.innerHTML = '';
-  const pc = document.createElement('div');
-  let pcClass='prol-card', pvClass='prol-value';
-  if(prol>prolIdeal && prolIdeal>0){ pcClass='prol-card warn'; pvClass='prol-value warn'; }
-  if(lucroAntes<=0){ pcClass='prol-card danger'; pvClass='prol-value danger'; }
-  pc.className=pcClass;
-  pc.innerHTML=`<div class="prol-title">💡 Sugestão: Pró-labore Ideal</div>
-    <div class="${pvClass}">${fmt(prolIdeal)}</div>
-    <div class="prol-hint">Até 50% do lucro antes das retiradas. Assim a empresa cresce e você se remunera bem.</div>`;
-  prolCard.appendChild(pc);
-  g('rx-prol-ideal').textContent = fmt(prolIdeal);
-
+  const pc=document.createElement('div');let pcC='prol-card',pvC='prol-value';
+  if(prol>prolIdeal&&prolIdeal>0){pcC='prol-card warn';pvC='prol-value warn';}
+  if(antes<=0){pcC='prol-card danger';pvC='prol-value danger';}
+  pc.className=pcC;pc.innerHTML=`<div class="prol-title">💡 Pró-labore Ideal</div><div class="${pvC}">${fmt(prolIdeal)}</div><div class="prol-hint">Até 50% do lucro antes das retiradas. Assim a empresa cresce e você se remunera bem.</div>`;
+  g('rx-prol-analise').innerHTML='';g('rx-prol-analise').appendChild(pc);
   // Saúde
+  if(fat>0){const mb=(fat-cmv)/fat*100,pf=fix/fat*100,pc2=cmv/fat*100,pp=antes>0?prol/antes*100:0;setSaude('s-margem-bruta',mb.toFixed(1)+'%',mb>=40?'ok':'warn',mb>=40?'✅ Saudável':'⚠️ Atenção');setSaude('s-peso-fixos',pf.toFixed(1)+'%',pf<=30?'ok':'warn',pf<=30?'✅ Controlado':'⚠️ Elevado');setSaude('s-peso-cmv',pc2.toFixed(1)+'%',pc2<=50?'ok':'warn',pc2<=50?'✅ OK':'⚠️ Revisar');setSaude('s-prol-pct',antes>0?pp.toFixed(1)+'%':'—',pp<=50?'ok':'warn',pp<=50?'✅ Ideal':'⚠️ Alto');}
+  // Carta personalizada
   if(fat>0){
-    const mb = (fat-cmv)/fat*100;
-    const pf = fix/fat*100;
-    const pc2= cmv/fat*100;
-    const pp = lucroAntes>0 ? prol/lucroAntes*100 : 0;
-
-    setSaude('s-margem-bruta', mb.toFixed(1)+'%', mb>=40 ? 'ok':'warn', mb>=40?'✅ Saudável':'⚠️ Atenção');
-    setSaude('s-peso-fixos', pf.toFixed(1)+'%', pf<=30?'ok':'warn', pf<=30?'✅ Controlado':'⚠️ Elevado');
-    setSaude('s-peso-cmv', pc2.toFixed(1)+'%', pc2<=50?'ok':'warn', pc2<=50?'✅ OK':'⚠️ Revisar');
-    setSaude('s-prol-pct', lucroAntes>0 ? pp.toFixed(1)+'%' : '—', pp<=50?'ok':'warn', pp<=50?'✅ Ideal':'⚠️ Alto');
+    const nome=nomeUsuaria||'Empreendedora';
+    const mesAtual=new Date().toLocaleDateString('pt-BR',{month:'long'});
+    let cartaTxt='';
+    if(res>0&&res/fat*100>=15)cartaTxt=`${nome}, em ${mesAtual} o seu negócio faturou ${fmt(fat)} e gerou um lucro real de ${fmt(res)}, com margem de ${(res/fat*100).toFixed(1)}%. Isso é resultado de dedicação e gestão. Continue registrando seus números todo mês — quem mede, cresce. Você está construindo algo incrível! 🌟`;
+    else if(res>0)cartaTxt=`${nome}, em ${mesAtual} você faturou ${fmt(fat)} e fechou no positivo com ${fmt(res)}. O negócio está funcionando, mas há espaço para crescer a margem. Revise sua precificação e veja onde os custos podem ser ajustados. Você está no caminho certo! 💚`;
+    else cartaTxt=`${nome}, em ${mesAtual} o negócio faturou ${fmt(fat)}, mas os custos superaram as entradas. Isso não é fracasso — é informação. Com os números na mão, você tem o poder de tomar as decisões certas. Uma revisão cuidadosa dos custos e da precificação pode virar esse jogo. Você tem coragem, e isso é o que mais importa. 💪`;
+    g('carta-texto').textContent=cartaTxt;
+    g('carta-card').style.display='block';
   }
-
-  // Chart custos
-  const ctx2 = g('chartCustos').getContext('2d');
-  if(chartCustosInst){ chartCustosInst.destroy(); chartCustosInst=null; }
-  if(fat>0){
-    chartCustosInst = new Chart(ctx2,{
-      type:'bar',
-      data:{labels:['CMV','Fixas','Impostos','Pró-labore'],datasets:[{label:'R$',data:[cmv,fix,imp,prol],backgroundColor:['#FF8C42','#FFB347','#e85a22','#c08060'],borderRadius:6}]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'R$'+v}}}}
-    });
-  }
+  // Gráfico custos
+  if(chartCustosInst){chartCustosInst.destroy();chartCustosInst=null;}
+  if(fat>0){chartCustosInst=new Chart(g('chartCustos').getContext('2d'),{type:'bar',data:{labels:['Faturamento','Custos de Venda','Despesas Fixas','Impostos','Pró-labore / Retiradas'],datasets:[{label:'R$',data:[fat,cmv,fix,imp,prol],backgroundColor:['#1F7A63','#4caf50','#C8B6E2','#b09fd0','#c08060'],borderRadius:8,borderColor:['#1F7A63','#4caf50','#C8B6E2','#b09fd0','#c08060'],borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'R$ '+ctx.raw.toLocaleString('pt-BR',{minimumFractionDigits:2})}}},scales:{y:{beginAtZero:true,ticks:{font:{size:11},callback:v=>'R$'+v.toLocaleString('pt-BR')}},x:{ticks:{font:{size:11}}}}}});}
 }
 
-function setSaude(id, val, status, statusText){
-  const el=g(id);
-  el.textContent=val;
-  el.style.color = status==='ok'?'var(--lucro)':'var(--warn)';
-  const st=g(id.replace('s-','s-')+'-status') || el.nextElementSibling;
-  if(el.nextElementSibling) el.nextElementSibling.textContent=statusText;
-}
+function setSaude(id,val,st,txt){const el=g(id);el.textContent=val;el.style.color=st==='ok'?'var(--green)':'var(--warn)';if(el.nextElementSibling)el.nextElementSibling.textContent=txt;}
 
-function buildAlertas(fat,cmv,fix,imp,prol,lucroAntes,resultado,margem){
-  const el=g('rx-alertas'); el.innerHTML='';
-  const add=(cls,icon,msg)=>{
-    const d=document.createElement('div');
-    d.className='alert-item '+cls;
-    d.innerHTML=`<span class="alert-icon">${icon}</span><span>${msg}</span>`;
-    el.appendChild(d);
-  };
-  if(fat<=0){ add('','🟡','Preencha o faturamento para ver os alertas.'); return; }
-  if(resultado<0) add('danger','🚨',`Seu negócio está no prejuízo neste mês (${fmt(resultado)}). Revise custos e precificação com urgência.`);
-  else if(margem<15) add('warn','⚠️',`Margem de ${margem.toFixed(1)}% abaixo do ideal (15%). Considere revisar seus preços ou cortar custos.`);
+function buildAlertas(fat,cmv,fix,imp,prol,antes,res,margem){
+  const el=g('rx-alertas');el.innerHTML='';
+  const add=(cls,ic,msg)=>{const d=document.createElement('div');d.className='alert-item '+cls;d.innerHTML=`<span class="alert-icon">${ic}</span><span>${msg}</span>`;el.appendChild(d);};
+  if(fat<=0){add('default','🟡','Preencha o faturamento para ver os alertas.');return;}
+  if(res<0)add('danger','🚨',`Negócio no prejuízo este mês (${fmt(res)}). Revise custos e precificação com urgência.`);
+  else if(margem<15)add('warn','⚠️',`Margem de ${margem.toFixed(1)}% abaixo do ideal (15%). Considere revisar seus preços.`);
   else add('ok','✅',`Margem de ${margem.toFixed(1)}% — parabéns! Seu negócio está saudável este mês.`);
-  if(fat>0 && cmv/fat>0.5) add('warn','⚠️',`Custos de venda representam ${(cmv/fat*100).toFixed(1)}% do faturamento. O ideal é até 50%.`);
-  if(fat>0 && fix/fat>0.3) add('warn','⚠️',`Despesas fixas representam ${(fix/fat*100).toFixed(1)}% do faturamento. Avalie o que pode ser reduzido.`);
-  if(prol===0 && lucroAntes>0) add('warn','💼',`Você não está se pagando! O pró-labore ideal seria ${fmt(lucroAntes*0.5)}.`);
-  if(prol>lucroAntes*0.5 && lucroAntes>0) add('warn','⚠️',`Suas retiradas (${fmt(prol)}) superam 50% do lucro antes das retiradas. Isso pode comprometer o caixa.`);
+  if(cmv/fat>0.5)add('warn','⚠️',`Custos de venda: ${(cmv/fat*100).toFixed(1)}% do faturamento. O ideal é até 50%.`);
+  if(fix/fat>0.3)add('warn','⚠️',`Despesas fixas: ${(fix/fat*100).toFixed(1)}% do faturamento. Avalie o que pode ser reduzido.`);
+  if(prol===0&&antes>0)add('warn','💼',`Você não está se pagando! O pró-labore ideal seria ${fmt(antes*0.5)}.`);
+  if(prol>antes*0.5&&antes>0)add('warn','⚠️',`Suas retiradas (${fmt(prol)}) superam 50% do lucro antes das retiradas.`);
 }
 
-function applyTermometro(prefix, margem, fat, resultado, lucroAntes, prol, cmv, fix, imp){
-  const icon=g(prefix+'-icon'), emoji=g(prefix+'-emoji');
-  const titulo=g(prefix+'-titulo'), sub=g(prefix+'-sub');
-  const diag=g(prefix+'-diag'), marker=g(prefix+'-marker');
-
-  if(fat<=0){
-    icon.className='termo-icon neutral'; emoji.textContent='🟡';
-    titulo.className='termo-titulo neutral'; titulo.textContent='Aguardando dados';
-    sub.textContent='Preencha os campos para ver o diagnóstico.';
-    marker.style.left='48%'; marker.style.background='var(--brown3)';
-    diag.className='diag-box'; diag.textContent='Preencha a calculadora para ver o diagnóstico completo.';
-    return;
-  }
-
+function applyTermo(p,margem,fat,res,antes,prol,cmv,fix,imp){
+  const ic=g(p+'-icon'),em=g(p+'-emoji'),ti=g(p+'-titulo'),su=g(p+'-sub'),di=g(p+'-diag'),mk=g(p+'-marker');
+  if(fat<=0){ic.className='termo-icon neutral';em.textContent='🟡';ti.className='termo-titulo neutral';ti.textContent='Aguardando dados';su.textContent='Preencha os campos para ver o diagnóstico.';mk.style.left='48%';mk.style.background='var(--text3)';di.className='diag-box';di.textContent='Preencha a calculadora para ver o diagnóstico completo.';return;}
   const totalCustos=cmv+fix+imp;
-
-  if(resultado>0 && margem>=15){
-    icon.className='termo-icon lucro'; emoji.textContent='🌟';
-    titulo.className='termo-titulo lucro'; titulo.textContent='Seu negócio está lucrando!';
-    sub.textContent='Resultado positivo e saudável';
-    marker.style.left=Math.min(92,65+margem*0.4)+'%'; marker.style.background='var(--lucro)';
-    diag.className='diag-box lucro';
-    diag.innerHTML=`<span class="diag-strong">Parabéns, empreendedora! ✨ Seu negócio fechou o mês no azul com uma margem de ${margem.toFixed(1)}% — acima dos 15% recomendados.</span>
-      <br><br>Isso significa que, depois de pagar todos os custos, despesas fixas, impostos${prol>0?' e seu pró-labore':''}, ainda sobrou dinheiro no caixa. Esse é o resultado que toda dona de negócio merece ver!
-      <br><br>Use esse momento positivo para fortalecer sua empresa:
-      <ul class="dica-lista">
-        <li>Reserve pelo menos 10% do lucro como capital de giro para os meses mais difíceis.</li>
-        <li>Analise quais produtos ou serviços têm maior margem e invista mais neles.</li>
-        ${prol===0?'<li>Você ainda não está se pagando! Inclua um pró-labore — você é parte do custo do negócio.</li>':'<li>Continue se pagando com regularidade — seu trabalho tem valor e precisa estar no orçamento.</li>'}
-        <li>Considere reinvestir parte do lucro em marketing ou melhorias que gerem mais faturamento.</li>
-      </ul>`;
-  } else if(resultado>0 && margem<15){
-    icon.className='termo-icon atencao'; emoji.textContent='⚠️';
-    titulo.className='termo-titulo atencao'; titulo.textContent='Lucro abaixo do ideal';
-    sub.textContent='Positivo, mas merece atenção';
-    marker.style.left='48%'; marker.style.background='var(--warn)';
-    diag.className='diag-box atencao';
-    const margemCmv=fat>0?(cmv/fat*100).toFixed(1):0;
-    diag.innerHTML=`<span class="diag-strong">Você está no positivo — e isso é bom! Mas sua margem de ${margem.toFixed(1)}% está abaixo dos 15% recomendados para um negócio sustentável.</span>
-      <br><br>Qualquer imprevisto — uma queda nas vendas, um custo extra — pode facilmente virar prejuízo. Seu negócio está funcionando, mas caminhando em terreno delicado.
-      <br><br>O que você pode fazer agora para melhorar:
-      <ul class="dica-lista">
-        <li>Revise sua precificação: você pode estar cobrando menos do que deveria. O preço precisa cobrir custos <em>e</em> gerar lucro real.</li>
-        <li>Seus custos variáveis (${margemCmv}% do faturamento) são uma fatia importante — veja se há como negociar com fornecedores ou reduzir perdas.</li>
-        <li>Analise suas despesas fixas de ${fmt(fix)} e veja se algum gasto pode ser cortado ou renegociado sem prejudicar a operação.</li>
-        ${prol===0?'<li>Atenção: você não está se pagando. Isso mascara o resultado real — incluindo o pró-labore, provavelmente seria prejuízo.</li>':''}
-        <li>Busque aumentar o volume de vendas ou o ticket médio para que os custos fixos representem uma parcela menor.</li>
-      </ul>`;
-  } else {
-    icon.className='termo-icon prejuizo'; emoji.textContent='🚨';
-    titulo.className='termo-titulo prejuizo'; titulo.textContent='Atenção: o mês fechou no prejuízo';
-    sub.textContent='É hora de agir com clareza e coragem';
-    marker.style.left=Math.max(5,18+margem*0.3)+'%'; marker.style.background='var(--prejuizo)';
-    diag.className='diag-box prejuizo';
-    diag.innerHTML=`<span class="diag-strong">Seus gastos superaram seu faturamento este mês. Isso é um sinal de alerta — mas também é informação valiosa. Agora você sabe exatamente onde está e pode agir.</span>
-      <br><br>Prejuízo não significa que seu negócio está condenado. Significa que o modelo atual precisa ser revisado com urgência. Muitas mulheres chegam a esse ponto porque não tinham clareza dos números — e você acabou de dar o primeiro passo mais importante: olhar de frente para a realidade financeira.
-      <br><br>O que fazer agora, com prioridade:
-      <ul class="dica-lista">
-        <li><strong>Não misture dinheiro pessoal com o do negócio.</strong> Isso distorce os números e esconde o prejuízo real.</li>
-        <li>Revise cada despesa fixa de ${fmt(fix)}: o que é essencial? O que pode ser cortado ou renegociado agora mesmo?</li>
-        <li>Verifique sua precificação com urgência. Seus custos somam ${fmt(totalCustos)} — seu preço está cobrindo isso <em>e</em> gerando sobra?</li>
-        ${prol===0?'<li>Você não está se pagando, e mesmo assim houve prejuízo. Isso exige uma revisão completa do modelo de negócio.</li>':'<li>O pró-labore de '+fmt(prol)+' é legítimo, mas neste momento pode precisar ser ajustado enquanto você reestrutura o financeiro.</li>'}
-        <li>Busque apoio: Sebrae, mentoras financeiras, grupos de empreendedoras. Você não precisa resolver isso sozinha.</li>
-      </ul>
-      <br><span style="font-size:13px;font-style:italic;color:#8b0000">Negócios que duram são os que conhecem seus números. Você já está no caminho certo. 💪</span>`;
-  }
+  if(res>0&&margem>=15){ic.className='termo-icon lucro';em.textContent='🌟';ti.className='termo-titulo lucro';ti.textContent='Seu negócio está lucrando!';su.textContent='Resultado positivo e saudável';mk.style.left=Math.min(92,65+margem*0.4)+'%';mk.style.background='var(--green)';di.className='diag-box lucro';di.innerHTML=`<span class="diag-strong">Parabéns, empreendedora! ✨ Seu negócio fechou o mês no azul com margem de ${margem.toFixed(1)}% — acima dos 15% recomendados.</span><br><br>Isso significa que, depois de pagar todos os custos, despesas fixas, impostos${prol>0?' e seu pró-labore':''}, ainda sobrou dinheiro no caixa. Esse é o resultado que toda dona de negócio merece ver!<br><br>Use esse momento positivo para fortalecer sua empresa:<ul class="dica-lista"><li>Reserve pelo menos 10% do lucro como capital de giro para meses mais difíceis.</li><li>Analise quais serviços têm maior margem e invista mais neles.</li>${prol===0?'<li>Você ainda não está se pagando! Inclua um pró-labore — você é parte do custo do negócio.</li>':'<li>Continue se pagando com regularidade — seu trabalho tem valor e precisa estar no orçamento.</li>'}<li>Considere reinvestir parte do lucro em marketing ou melhorias que gerem mais faturamento.</li></ul>`;}
+  else if(res>0&&margem<15){ic.className='termo-icon atencao';em.textContent='⚠️';ti.className='termo-titulo atencao';ti.textContent='Lucro abaixo do ideal';su.textContent='Positivo, mas merece atenção';mk.style.left='48%';mk.style.background='var(--warn)';di.className='diag-box atencao';const mc=fat>0?(cmv/fat*100).toFixed(1):0;di.innerHTML=`<span class="diag-strong">Você está no positivo — e isso é bom! Mas sua margem de ${margem.toFixed(1)}% está abaixo dos 15% recomendados para um negócio sustentável.</span><br><br>Qualquer imprevisto pode facilmente virar prejuízo. Seu negócio está funcionando, mas em terreno delicado.<br><br>O que fazer agora:<ul class="dica-lista"><li>Revise sua precificação — você pode estar cobrando menos do que deveria.</li><li>Seus custos variáveis (${mc}% do faturamento) são uma fatia importante — negocie com fornecedores.</li><li>Analise suas despesas fixas de ${fmt(fix)} e veja o que pode ser renegociado.</li>${prol===0?'<li>Atenção: sem pró-labore, o resultado real seria ainda menor.</li>':''}<li>Busque aumentar o ticket médio ou o volume de atendimentos.</li></ul>`;}
+  else{ic.className='termo-icon prejuizo';em.textContent='🚨';ti.className='termo-titulo prejuizo';ti.textContent='Atenção: o mês fechou no prejuízo';su.textContent='É hora de agir com clareza e coragem';mk.style.left=Math.max(5,18+margem*0.3)+'%';mk.style.background='var(--prejuizo)';di.className='diag-box prejuizo';di.innerHTML=`<span class="diag-strong">Seus gastos superaram seu faturamento este mês. Isso é informação valiosa — agora você sabe exatamente onde está e pode agir.</span><br><br>Prejuízo não significa que seu negócio está condenado. Significa que o modelo atual precisa ser revisado. Muitas mulheres chegam a esse ponto por falta de clareza nos números — e você já deu o passo mais corajoso: olhar de frente para a realidade.<br><br>O que fazer agora, com prioridade:<ul class="dica-lista"><li><strong>Não misture dinheiro pessoal com o do negócio.</strong> Isso distorce tudo.</li><li>Revise cada despesa fixa de ${fmt(fix)}: o que é essencial? O que pode ser cortado agora?</li><li>Seus custos somam ${fmt(totalCustos)} — seus preços cobrem isso e geram sobra?</li>${prol===0?'<li>Sem pró-labore e ainda com prejuízo — isso exige revisão completa do modelo.</li>':'<li>O pró-labore de '+fmt(prol)+' é legítimo, mas pode precisar de ajuste agora.</li>'}<li>Busque apoio: Sebrae, mentoras financeiras, grupos de empreendedoras. Você não está sozinha.</li></ul><br><span style="font-size:.9rem;font-style:italic;color:#8b0000">Negócios que duram são os que conhecem seus números. Você já está no caminho certo. 💪</span>`;}
 }
 
-// ══════════════════════════════════
-//  ANUAL
-// ══════════════════════════════════
-const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-let mData = Array(12).fill(null).map(()=>({fat:0,cmv:0,fix:0,imp:0}));
-let chartAnualInst=null, chartAnualRxInst=null;
+// ── ANUAL ──
+const MESES=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+let mData=Array(12).fill(null).map(()=>({fat:0,cmv:0,fix:0,imp:0,prol:0}));
+let chartAnualInst=null,chartAnualRxInst=null;
 
-function buildMonthRows(){
-  const cont = g('months-rows'); cont.innerHTML='';
-  MESES.forEach((mes,i)=>{
-    const row = document.createElement('div');
-    row.className='month-row';
-    row.innerHTML=`
-      <div class="month-label">${mes.substring(0,3)}</div>
-      <input class="month-input" type="number" placeholder="0" min="0" data-m="${i}" data-f="fat" oninput="updateMonth(this)"/>
-      <input class="month-input" type="number" placeholder="0" min="0" data-m="${i}" data-f="cmv" oninput="updateMonth(this)"/>
-      <input class="month-input" type="number" placeholder="0" min="0" data-m="${i}" data-f="fix" oninput="updateMonth(this)"/>
-      <input class="month-input" type="number" placeholder="0" min="0" data-m="${i}" data-f="imp" oninput="updateMonth(this)"/>
-      <div class="month-result zero" id="m-res-${i}">—</div>`;
-    cont.appendChild(row);
-  });
-}
+function buildMonthRows(){const c=g('months-rows');c.innerHTML='';MESES.forEach((m,i)=>{const r=document.createElement('div');r.className='month-row';r.innerHTML=`<div class="month-label">${m.substring(0,3)}</div><input class="month-input" type="number" placeholder="0" data-m="${i}" data-f="fat" oninput="upM(this)"/><input class="month-input" type="number" placeholder="0" data-m="${i}" data-f="cmv" oninput="upM(this)"/><input class="month-input" type="number" placeholder="0" data-m="${i}" data-f="fix" oninput="upM(this)"/><input class="month-input" type="number" placeholder="0" data-m="${i}" data-f="imp" oninput="upM(this)"/><input class="month-input" type="number" placeholder="0" data-m="${i}" data-f="prol" oninput="upM(this)"/><div class="month-result zero" id="m-res-${i}">—</div>`;c.appendChild(r);});}
 
-function updateMonth(input){
-  const i=parseInt(input.dataset.m), f=input.dataset.f;
-  mData[i][f]=parseFloat(input.value)||0;
-  const d=mData[i];
-  const res=d.fat-d.cmv-d.fix-d.imp;
-  const el=g('m-res-'+i);
-  el.textContent = d.fat>0 ? (res<0?'- ':'')+fmtShort(Math.abs(res)) : '—';
-  el.className='month-result '+(d.fat<=0?'zero':res>=0?'lucro':'prejuizo');
-  calcAnual();
-}
+function upM(inp){const i=parseInt(inp.dataset.m),f=inp.dataset.f;mData[i][f]=parseFloat(inp.value)||0;const d=mData[i],res=d.fat-d.cmv-d.fix-d.imp-d.prol,el=g('m-res-'+i);el.textContent=d.fat>0?(res<0?'- ':'')+fmtShort(Math.abs(res)):'—';el.className='month-result '+(d.fat<=0?'zero':res>=0?'lucro':'prejuizo');calcAnual();}
 
 function calcAnual(){
-  const totFat=mData.reduce((s,d)=>s+d.fat,0);
-  const totLucro=mData.reduce((s,d)=>{const r=d.fat-d.cmv-d.fix-d.imp; return s+(d.fat>0?r:0);},0);
-  const margem=totFat>0?totLucro/totFat*100:0;
-  const mesesCom=mData.filter(d=>d.fat>0).length;
-
-  g('an-fat').textContent=fmtShort(totFat);
-  g('an-lucro').textContent=(totLucro<0?'- ':'')+fmtShort(Math.abs(totLucro));
-  g('an-lucro').className='annual-value '+(totLucro>0?'lucro':totLucro<0?'prejuizo':'');
-  g('an-margem').textContent=totFat>0?margem.toFixed(1)+'%':'—';
-  g('an-margem').className='annual-value '+(totLucro>0?'lucro':totLucro<0?'prejuizo':'');
-  g('an-ret').textContent='R$ 0';
-
+  const tF=mData.reduce((s,d)=>s+d.fat,0),tL=mData.reduce((s,d)=>s+(d.fat>0?d.fat-d.cmv-d.fix-d.imp-d.prol:0),0),tR=mData.reduce((s,d)=>s+d.prol,0),mg=tF>0?tL/tF*100:0;
+  g('an-fat').textContent=fmtShort(tF);g('an-lucro').textContent=(tL<0?'- ':'')+fmtShort(Math.abs(tL));g('an-lucro').className='annual-value '+(tL>0?'lucro':tL<0?'prejuizo':'');g('an-margem').textContent=tF>0?mg.toFixed(1)+'%':'—';g('an-margem').className='annual-value '+(tL>0?'lucro':tL<0?'prejuizo':'');g('an-ret').textContent=fmtShort(tR);
+  // Comparativo
+  const mesesCom=mData.filter(d=>d.fat>0);
+  if(mesesCom.length>=2){
+    const ult=mesesCom[mesesCom.length-1],pen=mesesCom[mesesCom.length-2];
+    const resUlt=ult.fat-ult.cmv-ult.fix-ult.imp,resPen=pen.fat-pen.cmv-pen.fix-pen.imp;
+    const diff=resPen!==0?((resUlt-resPen)/Math.abs(resPen)*100).toFixed(1):0;
+    const cbox=g('comparativo-box');cbox.style.display='block';
+    cbox.innerHTML=diff>0?`📈 Você cresceu ${diff}% no resultado em relação ao mês anterior! Continue assim!`:`📊 Resultado ${Math.abs(diff)}% ${diff<0?'abaixo':'igual'} ao mês anterior. Analise o que mudou para ajustar a rota.`;
+    cbox.style.background=diff>0?'var(--lucro-bg)':'var(--warn-bg)';cbox.style.borderColor=diff>0?'var(--lucro-border)':'var(--warn-border)';cbox.style.color=diff>0?'var(--green)':'var(--warn)';
+  } else { g('comparativo-box').style.display='none'; }
   renderChartAnual();
 }
 
-function renderChartAnual(){
-  const ctx=g('chartAnual').getContext('2d');
-  if(chartAnualInst){chartAnualInst.destroy();chartAnualInst=null;}
-  const fats=mData.map(d=>d.fat);
-  const lucros=mData.map(d=>d.fat>0?d.fat-d.cmv-d.fix-d.imp:null);
-  chartAnualInst=new Chart(ctx,{
-    type:'bar',
-    data:{
-      labels:MESES.map(m=>m.substring(0,3)),
-      datasets:[
-        {label:'Faturamento',data:fats,backgroundColor:'#FFB347',borderRadius:6,order:2},
-        {label:'Lucro/Prejuízo',data:lucros,backgroundColor:lucros.map(v=>v>=0?'#2d7a3a':'#c0392b'),borderRadius:6,order:1}
-      ]
-    },
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'R$'+v}}}}
-  });
-}
+function renderChartAnual(){if(chartAnualInst){chartAnualInst.destroy();chartAnualInst=null;}const fs=mData.map(d=>d.fat),ls=mData.map(d=>d.fat>0?d.fat-d.cmv-d.fix-d.imp-d.prol:null);chartAnualInst=new Chart(g('chartAnual').getContext('2d'),{type:'bar',data:{labels:MESES.map(m=>m.substring(0,3)),datasets:[{label:'Faturamento',data:fs,backgroundColor:'#C8B6E2',borderRadius:8,order:2},{label:'Lucro/Prejuízo',data:ls,backgroundColor:ls.map(v=>v===null||v>=0?'#1F7A63':'#c0392b'),borderRadius:8,order:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:12}}}},scales:{y:{beginAtZero:true,ticks:{font:{size:12}}}}}});}
 
-// ══════════════════════════════════
-//  RAIO X ANUAL
-// ══════════════════════════════════
+// ── RAIO X ANUAL ──
 function updateRaioXAnual(){
-  const totFat=mData.reduce((s,d)=>s+d.fat,0);
-  const totLucro=mData.reduce((s,d)=>s+(d.fat>0?d.fat-d.cmv-d.fix-d.imp:0),0);
-  const mesesCom=mData.filter(d=>d.fat>0).length;
-  const margem=totFat>0?totLucro/totFat*100:0;
-  const prolIdeal=Math.max(0,totLucro*0.5);
-
-  g('rxa-fat').textContent=fmtShort(totFat);
-  g('rxa-lp').textContent=(totLucro<0?'- ':'')+fmtShort(Math.abs(totLucro));
-  g('rxa-lp').className='annual-value '+(totLucro>0?'lucro':totLucro<0?'prejuizo':'');
-  g('rxa-marg').textContent=totFat>0?margem.toFixed(1)+'%':'—';
-  g('rxa-marg').className='annual-value '+(totLucro>0?'lucro':totLucro<0?'prejuizo':'');
-  g('rxa-prol-ideal').textContent=fmtShort(prolIdeal);
-
-  applyTermometroAnual(margem, totFat, totLucro, mesesCom);
-  buildAlertasAnuais(totFat, totLucro, margem, mesesCom);
-  buildDestaques();
-  renderChartAnualRx();
+  const tF=mData.reduce((s,d)=>s+d.fat,0),tL=mData.reduce((s,d)=>s+(d.fat>0?d.fat-d.cmv-d.fix-d.imp-d.prol:0),0),mc=mData.filter(d=>d.fat>0).length,mg=tF>0?tL/tF*100:0,pi=Math.max(0,tL*0.5);
+  g('rxa-fat').textContent=fmtShort(tF);g('rxa-lp').textContent=(tL<0?'- ':'')+fmtShort(Math.abs(tL));g('rxa-lp').className='annual-value '+(tL>0?'lucro':tL<0?'prejuizo':'');g('rxa-marg').textContent=tF>0?mg.toFixed(1)+'%':'—';g('rxa-marg').className='annual-value '+(tL>0?'lucro':tL<0?'prejuizo':'');g('rxa-prol-ideal').textContent=fmtShort(pi);
+  applyTermoAnual(mg,tF,tL,mc);buildAlertasAnuais(tF,tL,mg,mc);buildDestaques();
+  if(chartAnualRxInst){chartAnualRxInst.destroy();chartAnualRxInst=null;}
+  const fs=mData.map(d=>d.fat||null),ls=mData.map(d=>d.fat>0?d.fat-d.cmv-d.fix-d.imp-d.prol:null);
+  chartAnualRxInst=new Chart(g('chartAnualRx').getContext('2d'),{type:'line',data:{labels:MESES.map(m=>m.substring(0,3)),datasets:[{label:'Faturamento',data:fs,borderColor:'#C8B6E2',backgroundColor:'rgba(200,182,226,.15)',tension:.4,fill:true,pointRadius:5,pointBackgroundColor:'#C8B6E2'},{label:'Lucro/Prejuízo',data:ls,borderColor:'#1F7A63',backgroundColor:'rgba(31,122,99,.08)',tension:.4,fill:true,pointRadius:5,pointBackgroundColor:'#1F7A63'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:12}}}},scales:{y:{beginAtZero:false,ticks:{font:{size:12}}}}}});
 }
 
-function applyTermometroAnual(margem, fat, resultado, meses){
-  const icon=g('rxa-icon'), emoji=g('rxa-emoji');
-  const titulo=g('rxa-titulo'), sub=g('rxa-sub');
-  const diag=g('rxa-diag'), marker=g('rxa-marker');
-  if(fat<=0||meses===0){
-    icon.className='termo-icon neutral'; emoji.textContent='🟡';
-    titulo.className='termo-titulo neutral'; titulo.textContent='Sem dados suficientes';
-    sub.textContent='Preencha a Calculadora Anual para ver o diagnóstico.';
-    marker.style.left='48%'; marker.style.background='var(--brown3)';
-    diag.className='diag-box'; diag.textContent='Preencha a calculadora anual para ver o diagnóstico do ano.';
-    return;
-  }
-  if(resultado>0&&margem>=15){
-    icon.className='termo-icon lucro'; emoji.textContent='🌟';
-    titulo.className='termo-titulo lucro'; titulo.textContent='Ano lucrativo e saudável!';
-    sub.textContent=`Análise de ${meses} mês${meses>1?'es':''} com dados`;
-    marker.style.left=Math.min(92,65+margem*0.4)+'%'; marker.style.background='var(--lucro)';
-    diag.className='diag-box lucro';
-    diag.innerHTML=`<span class="diag-strong">Parabéns! 🎉 Seu negócio fechou o período no azul com margem média de ${margem.toFixed(1)}% — acima dos 15% recomendados.</span><br><br>
-      Isso significa que ao longo dos ${meses} meses analisados, seu negócio gerou valor real. Continue reinvestindo parte do lucro para crescer com segurança e consistência.<br><br>
-      <ul class="dica-lista">
-        <li>Mantenha o hábito de registrar mensalmente — visibilidade é poder de decisão.</li>
-        <li>Avalie quais meses performaram melhor e entenda o porquê — replique essas estratégias.</li>
-        <li>Considere criar uma reserva anual equivalente a 2–3 meses de despesas fixas.</li>
-        <li>Com margem saudável, é hora de pensar em crescimento: novos produtos, equipe, marketing.</li>
-      </ul>`;
-  } else if(resultado>0&&margem<15){
-    icon.className='termo-icon atencao'; emoji.textContent='⚠️';
-    titulo.className='termo-titulo atencao'; titulo.textContent='Ano positivo, mas abaixo do ideal';
-    sub.textContent=`Análise de ${meses} mês${meses>1?'es':''} com dados`;
-    marker.style.left='48%'; marker.style.background='var(--warn)';
-    diag.className='diag-box atencao';
-    diag.innerHTML=`<span class="diag-strong">Seu negócio foi lucrativo no período, mas a margem média de ${margem.toFixed(1)}% está abaixo dos 15% recomendados.</span><br><br>
-      Isso indica que a operação está funcionando, mas sem a gordura necessária para imprevistos ou crescimento sustentável. Um ou dois meses ruins podem comprometer o resultado do ano inteiro.<br><br>
-      <ul class="dica-lista">
-        <li>Identifique os meses com menor margem e entenda o que os diferencia dos meses melhores.</li>
-        <li>Revise sua tabela de preços — a precificação é a alavanca mais poderosa para aumentar margem.</li>
-        <li>Avalie se há custos fixos que cresceram sem acompanhar o faturamento.</li>
-        <li>Defina uma meta de margem para o próximo período e monitore mensalmente.</li>
-      </ul>`;
-  } else {
-    icon.className='termo-icon prejuizo'; emoji.textContent='🚨';
-    titulo.className='termo-titulo prejuizo'; titulo.textContent='Atenção: o ano fechou no prejuízo';
-    sub.textContent='Revisão urgente necessária';
-    marker.style.left=Math.max(5,18+margem*0.3)+'%'; marker.style.background='var(--prejuizo)';
-    diag.className='diag-box prejuizo';
-    diag.innerHTML=`<span class="diag-strong">O período acumulou prejuízo. Isso é um sinal sério — mas encarar os números é o primeiro passo para virar o jogo.</span><br><br>
-      Negócios que acumulam prejuízo por vários meses precisam de uma revisão profunda no modelo: precificação, estrutura de custos e estratégia de vendas. Não espere mais um mês para agir.<br><br>
-      <ul class="dica-lista">
-        <li>Faça um mapeamento completo de todos os seus custos fixos e questione cada um deles.</li>
-        <li>Reavalie urgentemente seus preços — você provavelmente está vendendo abaixo do custo real.</li>
-        <li>Busque apoio especializado: Sebrae oferece consultoria gratuita para MEIs e pequenas empresas.</li>
-        <li>Considere focar nos produtos/serviços com maior margem e suspender os que dão prejuízo.</li>
-        <li>Coloque o controle financeiro como prioridade número 1 — o que se mede, se melhora.</li>
-      </ul>
-      <br><span style="font-size:13px;font-style:italic;color:#8b0000">Você já está fazendo a parte mais difícil: olhando para os números. Isso é coragem de empreendedora. 💪</span>`;
-  }
+function applyTermoAnual(margem,fat,res,meses){
+  const ic=g('rxa-icon'),em=g('rxa-emoji'),ti=g('rxa-titulo'),su=g('rxa-sub'),di=g('rxa-diag'),mk=g('rxa-marker');
+  if(fat<=0||meses===0){ic.className='termo-icon neutral';em.textContent='🟡';ti.className='termo-titulo neutral';ti.textContent='Sem dados suficientes';su.textContent='Preencha a Calculadora Anual.';mk.style.left='48%';mk.style.background='var(--text3)';di.className='diag-box';di.textContent='Preencha a calculadora anual para ver o diagnóstico.';return;}
+  if(res>0&&margem>=15){ic.className='termo-icon lucro';em.textContent='🌟';ti.className='termo-titulo lucro';ti.textContent=meses===12?'Ano lucrativo e saudável!':'Período lucrativo e saudável!';su.textContent=meses===12?'Diagnóstico do ano completo':`Período: ${meses} mês${meses>1?'es':''} analisados`;mk.style.left=Math.min(92,65+margem*0.4)+'%';mk.style.background='var(--green)';di.className='diag-box lucro';di.innerHTML=`<span class="diag-strong">Parabéns! 🎉 Margem média de ${margem.toFixed(1)}% ao longo do período — acima dos 15% recomendados.</span><br><br>Seu negócio gerou valor real consistente. Isso é raro e precisa ser celebrado e mantido.<ul class="dica-lista"><li>Mantenha o hábito de registrar mensalmente — visibilidade é poder de decisão.</li><li>Avalie quais meses performaram melhor e replique essas estratégias.</li><li>Crie uma reserva equivalente a 2–3 meses de despesas fixas.</li><li>Com margem saudável, é hora de pensar em crescimento: novos serviços, equipe, marketing.</li></ul>`;}
+  else if(res>0&&margem<15){ic.className='termo-icon atencao';em.textContent='⚠️';ti.className='termo-titulo atencao';ti.textContent=meses===12?'Ano positivo, mas abaixo do ideal':'Período positivo, mas abaixo do ideal';su.textContent=meses===12?'Diagnóstico do ano completo':`Período: ${meses} mês${meses>1?'es':''} analisados`;mk.style.left='48%';mk.style.background='var(--warn)';di.className='diag-box atencao';di.innerHTML=`<span class="diag-strong">Seu negócio foi lucrativo no período, mas a margem média de ${margem.toFixed(1)}% está abaixo dos 15% recomendados.</span><br><br>A operação funciona, mas sem gordura para imprevistos ou crescimento sustentável.<ul class="dica-lista"><li>Identifique os meses com menor margem e o que os diferencia dos meses melhores.</li><li>Revise sua tabela de preços — é a alavanca mais poderosa para aumentar margem.</li><li>Avalie se há custos fixos que cresceram sem acompanhar o faturamento.</li><li>Defina uma meta de margem para o próximo período e monitore mensalmente.</li></ul>`;}
+  else{ic.className='termo-icon prejuizo';em.textContent='🚨';ti.className='termo-titulo prejuizo';ti.textContent=meses===12?'Atenção: o ano fechou no prejuízo':'Atenção: o período fechou no prejuízo';su.textContent='Revisão urgente necessária';mk.style.left=Math.max(5,18+margem*0.3)+'%';mk.style.background='var(--prejuizo)';di.className='diag-box prejuizo';di.innerHTML=`<span class="diag-strong">O período acumulou prejuízo. Encarar os números é o primeiro passo para virar o jogo.</span><br><br>Negócios que acumulam prejuízo precisam de revisão profunda: precificação, estrutura de custos e estratégia de vendas.<ul class="dica-lista"><li>Mapeie todos os custos fixos e questione cada um deles.</li><li>Reavalie urgentemente seus preços — você pode estar vendendo abaixo do custo real.</li><li>Busque apoio especializado: Sebrae oferece consultoria gratuita para MEIs.</li><li>Foque nos serviços com maior margem e suspenda os que dão prejuízo.</li><li>Coloque o controle financeiro como prioridade número 1.</li></ul><br><span style="font-size:.9rem;font-style:italic;color:#8b0000">Você já está fazendo a parte mais difícil: olhando para os números. Isso é coragem de empreendedora. 💪</span>`;}
 }
 
-function buildAlertasAnuais(fat, lucro, margem, meses){
-  const el=g('rxa-alertas'); el.innerHTML='';
-  const add=(cls,icon,msg)=>{
-    const d=document.createElement('div');
-    d.className='alert-item '+cls;
-    d.innerHTML=`<span class="alert-icon">${icon}</span><span>${msg}</span>`;
-    el.appendChild(d);
-  };
-  if(fat<=0||meses===0){add('','🟡','Sem dados suficientes para alertas anuais.');return;}
-  if(lucro<0) add('danger','🚨',`Prejuízo acumulado de ${fmt(lucro)} no período. Revisão urgente necessária.`);
-  else if(margem<15) add('warn','⚠️',`Margem média de ${margem.toFixed(1)}% abaixo do ideal. Meta: chegar a 15%.`);
+function buildAlertasAnuais(fat,lucro,margem,meses){
+  const el=g('rxa-alertas');el.innerHTML='';
+  const add=(cls,ic,msg)=>{const d=document.createElement('div');d.className='alert-item '+cls;d.innerHTML=`<span class="alert-icon">${ic}</span><span>${msg}</span>`;el.appendChild(d);};
+  if(fat<=0||meses===0){add('default','🟡','Sem dados suficientes para alertas anuais.');return;}
+  // Aviso de período incompleto SEMPRE em primeiro, se não tiver 12 meses
+  if(meses<12)add('default','📅',`Período analisado: ${meses} mês${meses>1?'es':''} de 12. Os indicadores abaixo refletem apenas os meses preenchidos.`);
+  // Diagnóstico principal
+  if(lucro<0)add('danger','🚨',`O período fechou no prejuízo (${fmt(lucro)}). Revise custos e precificação com urgência.`);
+  else if(margem<15)add('warn','⚠️',`Margem média de ${margem.toFixed(1)}% abaixo do ideal de 15%. Há espaço para melhorar.`);
   else add('ok','✅',`Margem média de ${margem.toFixed(1)}% — negócio saudável no período!`);
-  const mesesPrejuizo=mData.filter(d=>d.fat>0&&d.fat-d.cmv-d.fix-d.imp<0).length;
-  if(mesesPrejuizo>0) add('warn','⚠️',`${mesesPrejuizo} mês${mesesPrejuizo>1?'es':''} fechou${mesesPrejuizo>1?'ram':''} no prejuízo. Analise o que aconteceu nesses meses.`);
-  if(meses<6) add('','ℹ️',`Dados de apenas ${meses} mês${meses>1?'es':''}. Para um diagnóstico mais preciso, preencha todos os 12 meses.`);
+  // Meses no prejuízo
+  const mp=mData.filter(d=>d.fat>0&&d.fat-d.cmv-d.fix-d.imp-d.prol<0).length;
+  if(mp>0)add('warn','⚠️',`${mp} mês${mp>1?'es':''} fechou${mp>1?'ram':''} no prejuízo. Analise o que aconteceu nesses meses.`);
 }
 
 function buildDestaques(){
-  const el=g('rxa-destaques'); el.innerHTML='';
-  const comDados=mData.map((d,i)=>({...d,i,res:d.fat>0?d.fat-d.cmv-d.fix-d.imp:null})).filter(d=>d.res!==null);
-  if(comDados.length===0){el.innerHTML='<p style="font-size:13px;color:var(--brown3)">Sem dados suficientes ainda.</p>';return;}
-  const melhor=comDados.reduce((a,b)=>b.res>a.res?b:a);
-  const pior=comDados.reduce((a,b)=>b.res<a.res?b:a);
-  const d1=document.createElement('div'); d1.className='anual-best';
-  d1.innerHTML=`🏆 Melhor mês: <strong>${MESES[melhor.i]}</strong> — ${fmt(melhor.res)}`;
-  el.appendChild(d1);
-  if(comDados.length>1){
-    const d2=document.createElement('div'); d2.className='anual-worst';
-    d2.innerHTML=`📉 Mês mais difícil: <strong>${MESES[pior.i]}</strong> — ${pior.res<0?'- ':''} ${fmt(Math.abs(pior.res))}`;
-    el.appendChild(d2);
-  }
+  const el=g('rxa-destaques');el.innerHTML='';
+  const cd=mData.map((d,i)=>({...d,i,res:d.fat>0?d.fat-d.cmv-d.fix-d.imp-d.prol:null})).filter(d=>d.res!==null);
+  if(cd.length===0){el.innerHTML='<p style="font-size:.95rem;color:var(--text3)">Sem dados suficientes ainda.</p>';return;}
+  const mb=cd.reduce((a,b)=>b.res>a.res?b:a),pi=cd.reduce((a,b)=>b.res<a.res?b:a);
+  const d1=document.createElement('div');d1.className='anual-best';d1.innerHTML=`🏆 Melhor mês: <strong>${MESES[mb.i]}</strong> — ${fmt(mb.res)}`;el.appendChild(d1);
+  if(cd.length>1){const d2=document.createElement('div');d2.className='anual-worst';d2.innerHTML=`📉 Mês mais difícil: <strong>${MESES[pi.i]}</strong> — ${pi.res<0?'- ':''} ${fmt(Math.abs(pi.res))}`;el.appendChild(d2);}
 }
 
-function renderChartAnualRx(){
-  const ctx=g('chartAnualRx').getContext('2d');
-  if(chartAnualRxInst){chartAnualRxInst.destroy();chartAnualRxInst=null;}
-  const fats=mData.map(d=>d.fat||null);
-  const lucros=mData.map(d=>d.fat>0?d.fat-d.cmv-d.fix-d.imp:null);
-  chartAnualRxInst=new Chart(ctx,{
-    type:'line',
-    data:{
-      labels:MESES.map(m=>m.substring(0,3)),
-      datasets:[
-        {label:'Faturamento',data:fats,borderColor:'#FF8C42',backgroundColor:'rgba(255,140,66,.1)',tension:.4,fill:true,pointRadius:4},
-        {label:'Lucro/Prejuízo',data:lucros,borderColor:'#2d7a3a',backgroundColor:'rgba(45,122,58,.08)',tension:.4,fill:true,pointRadius:4,
-          segment:{borderColor:ctx2=>lucros[ctx2.p0DataIndex]<0?'#c0392b':'#2d7a3a'}}
-      ]
-    },
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{beginAtZero:false,ticks:{callback:v=>'R$'+v}}}}
-  });
-}
-
-// ══════════════════════════════════
-//  INIT
-// ══════════════════════════════════
 buildMonthRows();
 calcMensal();
+
+function toggleTooltip(id){
+  const el=g(id);
+  if(!el)return;
+  const box=el.querySelector('.tooltip-box');
+  if(!box)return;
+  const isOpen=box.style.display==='block';
+  // Fechar todos primeiro
+  document.querySelectorAll('.tooltip-box').forEach(t=>t.style.display='none');
+  // Abrir o clicado se estava fechado
+  if(!isOpen)box.style.display='block';
+}
+// Fechar tooltip ao clicar fora
+document.addEventListener('click',function(e){
+  if(!e.target.closest('.saude-label')){
+    document.querySelectorAll('.tooltip-box').forEach(t=>t.style.display='none');
+  }
+});
+
+function calcularFinal(){
+  const fat=parseFloat(g('fat').value)||0;
+  const camposFat=g('fat').value!=='',camposCmv=g('cmv').value!=='',camposFix=g('fixas').value!=='',camposImp=g('imp').value!=='',camposProl=g('prol').value!=='';
+  const todosCampos=camposFat&&camposCmv&&camposFix&&camposImp&&camposProl;
+  if(!todosCampos){
+    const avisoEl=g('aviso-campos');
+    if(avisoEl){avisoEl.style.display='block';avisoEl.scrollIntoView({behavior:'smooth',block:'center'});}
+    return;
+  }
+  if(fat<=0){
+    const avisoEl=g('aviso-campos');
+    if(avisoEl){avisoEl.innerHTML='⚠️ O faturamento não pode ser zero. Preencha o valor que entrou no caixa esse mês.';avisoEl.style.display='block';avisoEl.scrollIntoView({behavior:'smooth',block:'center'});}
+    return;
+  }
+  mostrarCardResultado();
+  if(!celebrou){if(resultadoAtual>0)disparaConfetes();celebrou=true;}
+}
+
+function mostrarCardResultado(){
+  // Mostrar demonstrativo e gráfico
+  const cd=g('card-demonstrativo'),cc=g('card-composicao');
+  if(cd)cd.style.display='block';
+  if(cc)cc.style.display='block';
+  const fat=fatAtual,res=resultadoAtual,antes=antesAtual,prol=prolAtual;
+  const margem=fat>0?res/fat*100:0;
+  const nome=nomeUsuaria?nomeUsuaria:'Empreendedora';
+  const overlay=g('resultado-overlay'),card=g('resultado-card');
+  const emoji=g('rc-emoji'),titulo=g('rc-titulo'),valor=g('rc-valor'),margemEl=g('rc-margem'),msg=g('rc-msg'),dicas=g('rc-dicas'),btnRc=g('btn-rc');
+
+  if(res>0&&margem>=15){
+    card.className='resultado-card lucro';
+    emoji.textContent='🎉';
+    titulo.className='rc-titulo lucro';titulo.textContent=`Parabéns, ${nome}!`;
+    valor.className='rc-valor lucro';valor.textContent=fmt(res);
+    margemEl.className='rc-margem lucro';margemEl.textContent=`Margem de ${margem.toFixed(1)}% ✅ acima dos 15% recomendados`;
+    msg.textContent=`Seu negócio fechou o mês no azul! Isso é resultado de dedicação e gestão consciente. Veja a análise completa no Raio X do Mês. 🌟`;
+    dicas.innerHTML='';
+    btnRc.className='btn-rc lucro';
+  } else if(res>0&&margem<15){
+    card.className='resultado-card atencao';
+    emoji.textContent='⚠️';
+    titulo.className='rc-titulo atencao';titulo.textContent=`${nome}, atenção!`;
+    valor.className='rc-valor atencao';valor.textContent=fmt(res);
+    margemEl.className='rc-margem atencao';margemEl.textContent=`Margem de ${margem.toFixed(1)}% — abaixo dos 15% ideais`;
+    msg.textContent=`Você lucrou, mas a margem ainda pede atenção. Veja o Raio X do Mês para entender o que ajustar. 💪`;
+    dicas.innerHTML='';
+    btnRc.className='btn-rc atencao';
+  } else {
+    card.className='resultado-card prejuizo';
+    emoji.textContent='💪';
+    titulo.className='rc-titulo prejuizo';titulo.textContent=`${nome}, você tem coragem!`;
+    valor.className='rc-valor prejuizo';valor.textContent='- '+fmt(Math.abs(res));
+    margemEl.className='rc-margem prejuizo';margemEl.textContent=`O mês fechou no prejuízo — mas encarar os números é o primeiro passo.`;
+    msg.textContent=`Quem olha para os números já está na frente. Acesse o Raio X do Mês para ver o diagnóstico completo e os próximos passos. 🌱`;
+    dicas.innerHTML='';
+    btnRc.className='btn-rc prejuizo';
+  }
+  overlay.classList.add('open');
+}
+
+function fecharResultado(){
+  g('resultado-overlay').classList.remove('open');
+}
+function fecharEIrParaRaioX(){
+  g('resultado-overlay').classList.remove('open');
+  switchTab('raiox', document.querySelector('.tab[data-tab="raiox"]'));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function verificarCelebracao(){
+  const fat=parseFloat(g('fat').value)||0;
+  const camposFat=g('fat').value!=='',camposCmv=g('cmv').value!=='',camposFix=g('fixas').value!=='',camposImp=g('imp').value!=='',camposProl=g('prol').value!=='';
+  const todosCampos=camposFat&&camposCmv&&camposFix&&camposImp&&camposProl;
+  if(todosCampos&&fat>0&&!celebrou){
+    mostrarCelebracao(resultadoAtual,fat);
+    celebrou=true;
+  }
+}
 </script>
 </body>
 </html>
